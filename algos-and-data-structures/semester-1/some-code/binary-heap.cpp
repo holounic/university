@@ -74,6 +74,15 @@ class BinaryHeap {
         *(this->heap + this->heapSize - 1) = value;
         siftUp(this->heapSize - 1);
     }
+    
+     void changeKey(int idx, int value) {
+        *(this->heap + idx) = value;
+        if ( *(this->heap + idx) < *(this->heap + (idx - 1) / 2)) {
+            siftUp(idx);
+        } else {
+            siftDown(idx);
+        }
+    }
 
     void show(int level) {
         int idxStart = -1;
