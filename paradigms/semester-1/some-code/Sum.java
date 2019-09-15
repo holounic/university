@@ -1,4 +1,4 @@
-public class Sum{
+public class Sum {
 
     private static int sum;
 
@@ -39,6 +39,7 @@ public class Sum{
         }
 
     }
+    
     public static void main(String [] args) {
         sum = 0;
 
