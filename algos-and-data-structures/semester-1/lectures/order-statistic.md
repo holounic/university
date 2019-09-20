@@ -26,7 +26,7 @@ int median(int [] a, int l, int r) {
                 swap(a[i], a[j])
         }
     }
-    return 
+    return a[l+3]
 }
 
 int find(int [] a, k) {
