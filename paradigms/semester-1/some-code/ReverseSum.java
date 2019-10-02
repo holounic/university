@@ -9,7 +9,7 @@ public class ReverseSum {
         List <Integer> colums = new ArrayList<>();
         List <Integer> raws = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
-        String line = "";
+        String line;
 
         while(scanner.hasNextLine()) {
             line = scanner.nextLine();
