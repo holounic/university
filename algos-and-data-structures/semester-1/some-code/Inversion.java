@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class inversion{
+public class Inversion{
 
     static long count = 0;
 
