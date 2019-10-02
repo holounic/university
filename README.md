@@ -1,5 +1,3 @@
-# university
-
 ## [Алгоритмы и структуры данных](https://github.com/holounic/university/tree/master/algos-and-data-structures/semester-1)
 
 Конспекты:
