@@ -7,7 +7,7 @@ public class WordStatInput {
             return new Scanner(file, encoding);
         }
         catch (FileNotFoundException e) {
-            return new Scanner("");
+            System.out.println("File not found exception");
         }
     }
 
