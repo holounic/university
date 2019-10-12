@@ -11,7 +11,7 @@ public class Scanner {
         resetBuffer();
     }
 
-    public Scanner(File file) throws FileNotFoundException{
+    public Scanner(File file) throws FileNotFoundException {
         reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
         resetBuffer();
     }
