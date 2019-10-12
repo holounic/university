@@ -10,13 +10,8 @@
 ## [Введение в программирование и парадигмы](https://github.com/holounic/university/tree/master/paradigms/semester-1)
 
 Домашки:
-
-*[Sum](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/Sum.java)
-
-*[SumDouble](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/SumDouble.java)
-
-*[ReverseSum](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/ReverseSum.java)
-
-*[WordStatInput](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/WordStatInput.java)
-
-*[WordStatIndex](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/WordStatIndex)
+* [Sum](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/Sum.java)
+* [SumDouble](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/SumDouble.java)
+* [ReverseSum](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/ReverseSum.java)
+* [WordStatInput](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/WordStatInput.java)
+* [WordStatIndex](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/WordStatIndex)
