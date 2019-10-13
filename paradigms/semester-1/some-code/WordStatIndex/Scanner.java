@@ -51,7 +51,7 @@ public class Scanner {
     
     public String nextLine() {
         try {
-            int current = reader.read();
+            int current = (int)buffer[--bufferIdx];
             while ((char)current != '\n' && current != -1) {
                 if (bufferIdx >= buffer.length) {
                     resizeBuffer();
