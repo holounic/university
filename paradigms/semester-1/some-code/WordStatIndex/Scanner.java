@@ -28,7 +28,7 @@ public class Scanner {
     }
 
     private String bufferToString() {
-        return new StringBuilder().append(buffer).toString();
+        return new StringBuilder().append(buffer, 0, bufferIdx).toString();
     }
 
     public boolean hasNext() {
