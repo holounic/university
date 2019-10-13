@@ -14,10 +14,10 @@ public class ReverseSum {
         int [][] input = new int[2][];
         int inputIdx = 0;
         int [] colums = new int[2];
-        fillArray(colums, 0);
+        fillWithZero(colums, 0);
         int columIdx = 0;
         int [] raws = new int[2];
-        fillArray(raws, 0);
+        fillWithZero(raws, 0);
         int rawsIdx = 0;
         Scanner scanner = new Scanner(System.in);
 
