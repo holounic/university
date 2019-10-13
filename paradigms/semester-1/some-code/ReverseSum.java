@@ -1,51 +1,84 @@
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 
 public class ReverseSum {
+
+    static void fillWithZero(int [] arr, int idx) {
+        for (int i = idx; i < arr.length; i++) {
+            arr[i] = 0;
+        }
+    }
+
     public static void main(String [] args) {
-        List <List<Integer>> input = new ArrayList<>();
-        List <Integer> colums = new ArrayList<>();
-        List <Integer> raws = new ArrayList<>();
+        int [][] input = new int[2][];
+        int inputIdx = 0;
+        int [] colums = new int[2];
+        fillArray(colums, 0);
+        int columIdx = 0;
+        int [] raws = new int[2];
+        fillArray(raws, 0);
+        int rawsIdx = 0;
         Scanner scanner = new Scanner(System.in);
-        String line;
 
         while(scanner.hasNextLine()) {
-            line = scanner.nextLine();
+            String line = scanner.nextLine();
             String [] parsed = line.split(" ");
-            List <Integer> currentLine = new ArrayList<>(0);
+
+            if (parsed.length >= colums.length) {
+                colums = Arrays.copyOf(colums, colums.length * 2);
+                fillWithZero(colums, colums.length / 2);
+            }
+
+            if (rawsIdx > raws.length - 1) {
+                raws = Arrays.copyOf(raws, raws.length * 2);
+
+                fillWithZero(raws, raws.length / 2);
+                int [][] temp = new int[input.length][];
+                for (int k = 0; k < input.length; k++) {
+                    temp[k] = new int [input[k].length];
+                    System.arraycopy(input[k], 0, temp[k], 0, input[k].length);
+                }
+                input = new int[input.length * 2][];
+                for (int k = 0; k < temp.length; k++){
+                    input[k] = temp[k];
+                }
+            }
 
             if (line.isEmpty()) {
-                input.add(currentLine);
-                raws.add(0);
+                input[inputIdx++] = new int[0];
+                raws[rawsIdx++] = 0;
                 continue;
             }
+            int [] currentLine = new int[parsed.length];
             
             int lineSum = 0;
             for (int i = 0; i < parsed.length; i++) {
                 int currentInt = Integer.parseInt(parsed[i]);
                 lineSum += currentInt;
-                if (colums.size() <= i) {
-                    colums.add(0);
+                if (colums.length <= i) {
+                    colums = Arrays.copyOf(colums, colums.length * 2);
+                    fillWithZero(colums, colums.length / 2);
                 }
-                int temp = colums.get(i) + currentInt;
-                colums.set(i, temp);
-                currentLine.add(currentInt);
+                colums[i] += currentInt;
+                currentLine[i] = currentInt;
             }
-            raws.add(lineSum);
-            input.add(currentLine);
+            raws[rawsIdx++] = lineSum;
+            input[inputIdx++] = currentLine;
         }
         scanner.close();
-        for (int i = 0; i < input.size(); i++) {
-            if (input.get(i).size() == 0) {
+
+        for (int i = 0; i < inputIdx; i++) {
+            if (input[i].length == 0) {
                 System.out.println();
                 continue;
+            } else {
+                for (int j = 0; j < input[i].length; j++) {
+                    System.out.print(raws[i] + colums[j] - input[i][j] + " ");
+                }
+                System.out.println();
             }
-            for (int j = 0; j < input.get(i).size(); j++) {
-                System.out.print(raws.get(i) + colums.get(j) - input.get(i).get(j) + " ");
-            }
-            System.out.println();
+            
         }
     }
 }
