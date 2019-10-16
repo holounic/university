@@ -16,3 +16,4 @@
 * [WordStatInput](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/WordStatInput.java)
 * [ReverseMin](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/ReverseMin)
 * [WordStatIndex](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/WordStatIndex)
+* [Markup](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/markup)
