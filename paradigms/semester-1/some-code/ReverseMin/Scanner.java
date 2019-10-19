@@ -1,4 +1,3 @@
-import java.util.*;
 import java.io.*;
 
 public class Scanner {
@@ -27,6 +26,23 @@ public class Scanner {
                 nextChar = reader.read();
             }
             while (Character.isWhitespace((char)nextChar)) {
+                hasBuffered = false;
+                nextChar = reader.read();
+            }
+            bufferedChar = nextChar;
+            hasBuffered = true;
+        } catch (IOException e) {
+            System.out.println("IOException caught: " + e);
+        }
+    }
+
+    private void skipBlankTillLineBreak() {
+        try {
+            int nextChar = bufferedChar;
+            if (!hasBuffered) {
+                nextChar = reader.read();
+            }
+            while (Character.isWhitespace((char)nextChar) && nextChar != (int)'\n' && nextChar != -1) {
                 hasBuffered = false;
                 nextChar = reader.read();
             }
@@ -68,17 +84,20 @@ public class Scanner {
         } catch (IOException e) {
             System.out.println("IOException caught: " + e);
         }
+        resetBuffer();
         return builder.toString();
     }
     
     public String nextLine() {
+        skipBlankTillLineBreak();
         StringBuilder builder = new StringBuilder();
         try {
-            if (hasBuffered) {
-                builder.append((char)bufferedChar);
-                hasBuffered = false;
+            int currentChar = -1;
+            if (hasBuffered && bufferedChar != -1) {
+                currentChar = bufferedChar;
+            } else {
+                currentChar = reader.read();
             }
-            int currentChar = reader.read();
             while (currentChar != -1 && currentChar != (int)'\n') {
                 builder.append((char)currentChar);
                 currentChar = reader.read();
@@ -86,7 +105,7 @@ public class Scanner {
         } catch (IOException e) {
             System.out.println("IOException caught: " + e);
         }
-        bufferedChar = -1;
+        resetBuffer();
         return builder.toString();
     }
 
