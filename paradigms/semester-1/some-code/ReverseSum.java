@@ -4,20 +4,12 @@ import java.util.Arrays;
 
 public class ReverseSum {
 
-    static void fillWithZero(int [] arr, int idx) {
-        for (int i = idx; i < arr.length; i++) {
-            arr[i] = 0;
-        }
-    }
-
     public static void main(String [] args) {
         int [][] input = new int[2][];
         int inputIdx = 0;
         int [] colums = new int[2];
-        fillWithZero(colums, 0);
         int columIdx = 0;
         int [] raws = new int[2];
-        fillWithZero(raws, 0);
         int rawsIdx = 0;
         Scanner scanner = new Scanner(System.in);
 
@@ -27,13 +19,11 @@ public class ReverseSum {
 
             if (parsed.length >= colums.length) {
                 colums = Arrays.copyOf(colums, colums.length * 2);
-                fillWithZero(colums, colums.length / 2);
             }
 
             if (rawsIdx > raws.length - 1) {
                 raws = Arrays.copyOf(raws, raws.length * 2);
 
-                fillWithZero(raws, raws.length / 2);
                 int [][] temp = new int[input.length][];
                 for (int k = 0; k < input.length; k++) {
                     temp[k] = new int [input[k].length];
@@ -58,7 +48,6 @@ public class ReverseSum {
                 lineSum += currentInt;
                 if (colums.length <= i) {
                     colums = Arrays.copyOf(colums, colums.length * 2);
-                    fillWithZero(colums, colums.length / 2);
                 }
                 colums[i] += currentInt;
                 currentLine[i] = currentInt;
