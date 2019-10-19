@@ -2,9 +2,9 @@ import java.util.*;
 import java.io.*;
 
 public class Scanner {
-    public BufferedReader reader;
-    private char[] buffer;
-    private int bufferIdx;
+    private Reader reader;
+    private int bufferedChar;
+    private boolean hasBuffered;
 
     public Scanner(InputStream stream) {
         reader = new BufferedReader(new InputStreamReader(stream));
@@ -12,38 +12,38 @@ public class Scanner {
     }
 
     public Scanner(File file) throws FileNotFoundException {
-        reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        resetBuffer();
+        this((new FileInputStream(file)));
     }
 
     private void resetBuffer() {
-        buffer = new char[7];
-        bufferIdx = 0;
+        bufferedChar = -2;
+        hasBuffered = false;
     }
 
-    private void resizeBuffer() {
-        char [] resized = new char[buffer.length * 2];
-        System.arraycopy(buffer, 0, resized, 0, buffer.length);
-        buffer = resized;
-    }
-
-    private String bufferToString() {
-        if (bufferIdx == 0) {
-            return "";
+    private void skipWhiteSpace() {
+        try {
+            int nextChar = bufferedChar;
+            if (!hasBuffered) {
+                nextChar = reader.read();
+            }
+            while (Character.isWhitespace((char)nextChar)) {
+                hasBuffered = false;
+                nextChar = reader.read();
+            }
+            bufferedChar = nextChar;
+            hasBuffered = true;
+        } catch (IOException e) {
+            System.out.println("IOException caught: " + e);
         }
-        return new StringBuilder().append(buffer, 0, bufferIdx).toString();
     }
 
     public boolean hasNext() {
         try {
-            int current = reader.read();
-            if (current == -1) {
-                return false;
-            } else {
-                if (buffer.length <= bufferIdx) {
-                    resizeBuffer();
-                }
-                buffer[bufferIdx++] = (char)current;
+            if (!hasBuffered) {
+                bufferedChar = reader.read();
+                hasBuffered = true;
+            }
+            if (bufferedChar >= 0) {
                 return true;
             }
         } catch (IOException e) {
@@ -51,23 +51,43 @@ public class Scanner {
         }
         return false;
     }
+
+    public String next() {
+        StringBuilder builder = new StringBuilder();
+        skipWhiteSpace();
+        try {
+            if (hasBuffered && bufferedChar != -1) {
+                builder.append((char)bufferedChar);
+                hasBuffered = false;
+            }
+            int currentChar = reader.read();
+            while (currentChar != -1 && !Character.isWhitespace((char)currentChar)) {
+                builder.append((char)currentChar);
+                currentChar = reader.read();
+            }
+        } catch (IOException e) {
+            System.out.println("IOException caught: " + e);
+        }
+        return builder.toString();
+    }
     
     public String nextLine() {
+        StringBuilder builder = new StringBuilder();
         try {
-            int current = (int)buffer[--bufferIdx];
-            while ((char)current != '\n' && current != -1) {
-                if (bufferIdx >= buffer.length) {
-                    resizeBuffer();
-                }
-                buffer[bufferIdx++] = (char)current;
-                current = reader.read();
+            if (hasBuffered) {
+                builder.append((char)bufferedChar);
+                hasBuffered = false;
             }
-        }  catch (IOException e) { 
-            System.out.println("IOException caught: " + e);   
+            int currentChar = reader.read();
+            while (currentChar != -1 && currentChar != (int)'\n') {
+                builder.append((char)currentChar);
+                currentChar = reader.read();
+            }
+        } catch (IOException e) {
+            System.out.println("IOException caught: " + e);
         }
-        String line = bufferToString();
-        resetBuffer();
-        return line;
+        bufferedChar = -1;
+        return builder.toString();
     }
 
     public void close() {
