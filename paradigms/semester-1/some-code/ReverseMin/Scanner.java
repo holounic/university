@@ -5,10 +5,12 @@ public class Scanner {
     private Reader reader;
     private int bufferedChar;
     private boolean hasBuffered;
+    private boolean isLineBreak;
 
     public Scanner(InputStream stream) {
         reader = new BufferedReader(new InputStreamReader(stream));
         resetBuffer();
+        isLineBreak = false;
     }
 
     public Scanner(File file) throws FileNotFoundException {
@@ -16,7 +18,7 @@ public class Scanner {
     }
 
     private void resetBuffer() {
-        bufferedChar = -2;
+        bufferedChar = -1;
         hasBuffered = false;
     }
 
@@ -46,12 +48,17 @@ public class Scanner {
             while (Character.isWhitespace((char)nextChar) && nextChar != (int)'\n' && nextChar != -1) {
                 hasBuffered = false;
                 nextChar = reader.read();
+                isLineBreak = (boolean) (nextChar == (int)'\n');
             }
             bufferedChar = nextChar;
             hasBuffered = true;
         } catch (IOException e) {
             System.out.println("IOException caught: " + e);
         }
+    }
+
+    public boolean isLineEnd() {
+        return isLineBreak;
     }
 
     public boolean hasNext() {
@@ -94,6 +101,10 @@ public class Scanner {
             while (checker(currentChar, partitial)) {
                 builder.append((char)currentChar);
                 currentChar = reader.read();
+            }
+            isLineBreak = false;
+            if (currentChar == (int)'\n') {
+                isLineBreak = true;
             }
         } catch (IOException e) {
             System.out.println("IOException caught: " + e);
