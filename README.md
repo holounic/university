@@ -5,6 +5,7 @@
 * [Бинарная куча](https://github.com/holounic/university/blob/master/algos-and-data-structures/semester-1/lectures/binary-heap.md)
 * [Алгоритм Блюма - Флойда - Пратта - Ривеста - Тарьяна (K-я порядковая статистика)](https://github.com/holounic/university/blob/master/algos-and-data-structures/semester-1/lectures/order-statistic.md)
 * [Cортировка подсчетом и цифровая сортировка](algos-and-data-structures/semester-1/lectures/radix&count-sorts.md)
+* [Амортизированное время работы](https://github.com/holounic/university/blob/master/algos-and-data-structures/semester-1/lectures/vector.md)
 
 
 ## [Введение в программирование и парадигмы](https://github.com/holounic/university/tree/master/paradigms/semester-1)
