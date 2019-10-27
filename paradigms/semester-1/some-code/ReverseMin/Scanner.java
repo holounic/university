@@ -1,3 +1,4 @@
+
 import java.io.*;
 
 public class Scanner {
@@ -68,45 +69,50 @@ public class Scanner {
         return false;
     }
 
-    public String next() {
-        StringBuilder builder = new StringBuilder();
-        skipWhiteSpace();
-        try {
-            if (hasBuffered && bufferedChar != -1) {
-                builder.append((char)bufferedChar);
-                hasBuffered = false;
-            }
-            int currentChar = reader.read();
-            while (currentChar != -1 && !Character.isWhitespace((char)currentChar)) {
-                builder.append((char)currentChar);
-                currentChar = reader.read();
-            }
-        } catch (IOException e) {
-            System.out.println("IOException caught: " + e);
-        }
-        resetBuffer();
-        return builder.toString();
+    private boolean lineChecker(int c) {
+        return c != -1 && c != (int)'\n';
     }
-    
-    public String nextLine() {
-        skipBlankTillLineBreak();
+
+    private boolean nextChecker(int c) {
+        return c != -1 && !Character.isWhitespace(c);
+    }
+
+    private boolean checker(int c, boolean partitial) {
+        if (partitial) return nextChecker(c);
+        return lineChecker(c);
+    }
+
+    private String readNext(boolean partitial) {
         StringBuilder builder = new StringBuilder();
         try {
-            int currentChar = -1;
+            int currentChar;
             if (hasBuffered && bufferedChar != -1) {
                 currentChar = bufferedChar;
             } else {
                 currentChar = reader.read();
             }
-            while (currentChar != -1 && currentChar != (int)'\n') {
+            while (checker(currentChar, partitial)) {
                 builder.append((char)currentChar);
                 currentChar = reader.read();
             }
         } catch (IOException e) {
             System.out.println("IOException caught: " + e);
         }
-        resetBuffer();
         return builder.toString();
+    }
+
+    public String next() {
+        skipWhiteSpace();
+        String next = readNext(true);
+        resetBuffer();
+        return next;
+    }
+
+    public String nextLine() {
+        skipBlankTillLineBreak();
+        String line = readNext(false);
+        resetBuffer();
+        return line;
     }
 
     public void close() {
