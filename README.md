@@ -7,6 +7,8 @@
 * [Cортировка подсчетом и цифровая сортировка](algos-and-data-structures/semester-1/lectures/radix&count-sorts.md)
 * [Амортизированное время работы](https://github.com/holounic/university/blob/master/algos-and-data-structures/semester-1/lectures/vector.md)
 
+Лабораторные:
+* [Sorting algos, Binary heap, Binary Search](https://github.com/holounic/university/tree/master/algos-and-data-structures/semester-1/labs/lab-1)
 
 ## [Введение в программирование и парадигмы](https://github.com/holounic/university/tree/master/paradigms/semester-1)
 
