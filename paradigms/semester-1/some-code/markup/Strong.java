@@ -1,8 +1,8 @@
 package markup;
 import java.util.List;
 
-public class Strong extends MarkableBlock implements TextBlock {
-    public Strong(List <TextBlock> content) {
+public class Strong extends MarkupBlock implements toParagraph {
+    public Strong(List <toParagraph> content) {
         super(content);
         this.specifier = "__";
     }
