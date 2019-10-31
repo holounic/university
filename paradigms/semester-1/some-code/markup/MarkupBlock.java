@@ -9,13 +9,16 @@ public abstract class MarkupBlock implements TextBlock {
         this.textField = content;
     }
     @Override
-    public String toMarkdown() {
-        StringBuilder builder = new StringBuilder();
+    public StringBuilder toMarkdown(StringBuilder builder) {
         builder.append(this.specifier);
         for (int idx = 0; idx < this.textField.size(); idx++) {
             builder.append(this.textField.get(idx).toMarkdown());
         }
         builder.append(specifier);
-        return builder.toString();
+        return builder;
+    }
+    @Override
+    public String toMarkdown() {
+        return toMarkdown(new StringBuilder()).toString();
     }
 }
