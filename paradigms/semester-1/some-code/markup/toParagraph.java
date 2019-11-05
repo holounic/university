@@ -1,4 +1,4 @@
 package markup;
-public interface toParagraph extends TextBlock {
-    String toMarkdown();
+public interface toParagraph extends TexBlock {
+    void toMarkdown(StringBuilder builder);
 }

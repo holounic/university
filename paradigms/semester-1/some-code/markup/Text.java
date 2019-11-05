@@ -6,7 +6,11 @@ public class Text implements toParagraph {
         this.textField = text;
     }
     @Override
-    public String toMarkdown() {
-        return this.textField;
+    public void toMarkdown(StringBuilder builder) {
+        builder.append(this.textField);
+    }
+    @Override
+    public void toTex(StringBuilder builder) {
+        builder.append(this.textField);
     }
 }

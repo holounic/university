@@ -1,5 +1,5 @@
 package markup;
 
-public interface TextBlock {
-    String toMarkdown();
+public interface TextBlock extends TexBlock {
+    void toMarkdown(StringBuilder builder);
 }
