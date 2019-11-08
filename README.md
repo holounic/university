@@ -20,4 +20,4 @@
 * [ReverseMin](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/ReverseMin)
 * [WordStatIndex](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/WordStatIndex)
 * [Markup](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/markup)
-*[north-western-russia-regional-contest](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/north-western-russia-regional-contest)
+* [north-western-russia-regional-contest](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/north-western-russia-regional-contest)
