@@ -4,7 +4,14 @@ import java.util.List;
 public class Strikeout extends MarkupBlock implements toParagraph {
     public Strikeout(List<toParagraph> content) {
         super(content);
-        this.mdSpecifier = "~";
-        this.texSpecifier = "textst";
+    }
+
+    @Override
+    public void toMarkdown(StringBuilder builder) {
+        toMarkupLang(builder, "~", "~", Lang.MARKDOWN);
+    }
+    @Override
+    public void toTex(StringBuilder builder) {
+        toMarkupLang(builder, "\\textst{", "}", Lang.TEX);
     }
 }

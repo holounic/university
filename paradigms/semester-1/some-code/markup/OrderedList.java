@@ -4,9 +4,11 @@ import java.util.List;
 public class OrderedList extends AbstractList implements toList {
     public OrderedList(List<ListItem> content) {
         super(content);
-        this.texSpecifierBegin = "\\begin{enumerate}";
-        this.texSpecifierEnd = "\\end{enumerate}";
     }
 
+    @Override
+    public void toTex(StringBuilder builder) {
+        toTex(builder, "\\begin{enumerate}", "\\end{enumerate}");
+    }
 
 }
