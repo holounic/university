@@ -1,4 +1,3 @@
-
 import java.io.*;
 
 public class Scanner {
@@ -6,6 +5,10 @@ public class Scanner {
     private int bufferedChar;
     private boolean hasBuffered;
     private boolean isLineBreak;
+    private enum CheckerType {
+        LINE,
+        SEQUENCE
+    }
 
     public Scanner(InputStream stream) {
         reader = new BufferedReader(new InputStreamReader(stream));
@@ -80,16 +83,22 @@ public class Scanner {
         return c != -1 && c != (int)'\n';
     }
 
-    private boolean nextChecker(int c) {
+    private boolean sequenceChecker(int c) {
         return c != -1 && !Character.isWhitespace(c);
     }
 
-    private boolean checker(int c, boolean partitial) {
-        if (partitial) return nextChecker(c);
-        return lineChecker(c);
+    private boolean checker(int c, CheckerType type) {
+        switch(type) {
+            case LINE:
+                return lineChecker(c);
+            case SEQUENCE:
+                return sequenceChecker(c);
+            default:
+                return false;
+        }
     }
 
-    private String readNext(boolean partitial) {
+    private String readNext(CheckerType type) {
         StringBuilder builder = new StringBuilder();
         try {
             int currentChar;
@@ -98,7 +107,7 @@ public class Scanner {
             } else {
                 currentChar = reader.read();
             }
-            while (checker(currentChar, partitial)) {
+            while (checker(currentChar, type)) {
                 builder.append((char)currentChar);
                 currentChar = reader.read();
             }
@@ -114,14 +123,14 @@ public class Scanner {
 
     public String next() {
         skipWhiteSpace();
-        String next = readNext(true);
+        String next = readNext(CheckerType.SEQUENCE);
         resetBuffer();
         return next;
     }
 
     public String nextLine() {
         skipBlankTillLineBreak();
-        String line = readNext(false);
+        String line = readNext(CheckerType.LINE);
         resetBuffer();
         return line;
     }
@@ -132,8 +141,8 @@ public class Scanner {
         } catch (IOException e) {
             System.out.println("Unable to close this Instance of Scanner");
         }
-        
+
         resetBuffer();
     }
-
 }
+
