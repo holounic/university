@@ -9,6 +9,7 @@
 
 Лабораторные:
 * [Sorting algos, Binary heap, Binary Search](https://github.com/holounic/university/tree/master/algos-and-data-structures/semester-1/labs/lab-1)
+* [Stacks, Queues, SDS](https://github.com/holounic/university/tree/master/algos-and-data-structures/semester-1/labs/lab-2)
 
 ## [Введение в программирование и парадигмы](https://github.com/holounic/university/tree/master/paradigms/semester-1)
 
