@@ -18,17 +18,16 @@ public class Converter {
             '>', "&gt;",
             '&', "&amp;"
     );
+
     private String text;
     private int pointer;
-    private StringBuilder builder;
 
-    public Converter(String mdText) {
-        this.text = mdText;
-        builder = new StringBuilder(text.length());
+    public Converter(String text) {
+        this.text = text;
         pointer = 0;
     }
 
-    private int parseHead() {
+    private int parseHead(StringBuilder builder) {
         StringBuilder ignored = new StringBuilder();
         while (text.charAt(pointer) == '#' && pointer < text.length() && pointer < 7) {
             ignored.append(text.charAt(pointer++));
@@ -39,27 +38,24 @@ public class Converter {
             return 0;
         }
         builder.append("<h" + pointer + ">");
-        return ++pointer;
+        return ++pointer - 1;
     }
 
-private boolean isOpenedMDSymbols(short length) {
-    if (pointer + length > text.length()) {
-        return false;
-    }
-    if (!mdSymbols.containsKey(text.substring(pointer, pointer + length))) {
-        return false;
-    }
-    if (pointer + length + 1 > text.length()) {
-        return true;
-    }
-    return !(Character.isWhitespace(text.charAt(pointer + length + 1)));
-}
-
-    private boolean isClosedMDSymbols(short length) {
-        if (pointer == 0 || pointer + length > text.length()) {
+    private boolean isOpeningMDSymbol(short length) {
+        if (pointer + length > text.length()) {
             return false;
         }
         if (!mdSymbols.containsKey(text.substring(pointer, pointer + length))) {
+            return false;
+        }
+        if (pointer + length + 1 > text.length()) {
+            return true;
+        }
+        return !(Character.isWhitespace(text.charAt(pointer + length + 1)));
+    }
+
+    private boolean isClosingMDSymbol(short length) {
+        if (pointer == 0 || pointer + length > text.length()) {
             return false;
         }
         return !Character.isWhitespace(text.charAt(pointer - 1));
@@ -72,8 +68,14 @@ private boolean isOpenedMDSymbols(short length) {
         return (Character.isWhitespace(text.charAt(pointer - 1)) && Character.isWhitespace(text.charAt(pointer + 1)));
     }
 
+    private void newBlock(String openingSequence, StringBuilder builder) {
+        pointer += openingSequence.length();
+        builder.append("<" + mdSymbols.get(openingSequence) + ">");
+        parseBody(openingSequence, builder);
+        builder.append("</" + mdSymbols.get(openingSequence) + ">");
+    }
 
-    private void parseBody(String openingSequence) {
+    private void parseBody(String openingSequence, StringBuilder builder) {
         while (pointer < text.length()) {
             char current = text.charAt(pointer);
 
@@ -89,14 +91,13 @@ private boolean isOpenedMDSymbols(short length) {
                 continue;
             }
 
-            if (current == '\\' && mdSymbols.containsKey(
-                Character.toString(text.charAt(pointer + 1)))) {
+            if (current == '\\' && mdSymbols.containsKey(Character.toString(text.charAt(pointer + 1)))) {
                 builder.append(text.charAt(pointer + 1));
                 pointer += 2;
                 continue;
             }
 
-            if (isClosedMDSymbols((short)1)) {
+            if (isClosingMDSymbol((short)1)) {
                 String sequence = text.substring(pointer, pointer + 1);
                 if (sequence.equals(openingSequence)) {
                     ++pointer;
@@ -104,7 +105,7 @@ private boolean isOpenedMDSymbols(short length) {
                 }
             }
 
-            if (isClosedMDSymbols((short)2)) {
+            if (isClosingMDSymbol((short)2)) {
                 String sequence = text.substring(pointer, pointer + 2);
                 if (sequence.equals(openingSequence)) {
                     pointer += 2;
@@ -112,21 +113,21 @@ private boolean isOpenedMDSymbols(short length) {
                 }
             }
 
-            if (isOpenedMDSymbols((short)2)) {
-                String sequence = text.substring(pointer, pointer + 2);
-                pointer += 2;
-                builder.append("<" + mdSymbols.get(sequence) + ">");
-                parseBody(sequence);
-                builder.append("</" + mdSymbols.get(sequence) + ">");
+            if (current == '[' && pointer + 1 < text.length()) {
+                ++pointer;
+                parseLink(builder);
                 continue;
             }
 
-            if (isOpenedMDSymbols((short)1)) {
+            if (isOpeningMDSymbol((short)2)) {
+                String sequence = text.substring(pointer, pointer + 2);
+                newBlock(sequence, builder);
+                continue;
+            }
+
+            if (isOpeningMDSymbol((short)1)) {
                 String sequence = text.substring(pointer, pointer + 1);
-                ++pointer;
-                builder.append("<" + mdSymbols.get(sequence) + ">");
-                parseBody(sequence);
-                builder.append("</" + mdSymbols.get(sequence) + ">");
+                newBlock(sequence, builder);
                 continue;
             }
 
@@ -135,12 +136,29 @@ private boolean isOpenedMDSymbols(short length) {
         }
     }
 
-    public String convert() {
-        int blockSpecifier = parseHead() - 1;
-        parseBody("openingemptysequence");
-        builder.append((blockSpecifier == -1 ? "</p>" : "</h" + blockSpecifier + ">"));
-        return builder.toString();
+    public void parseLink(StringBuilder builder) {
+        StringBuilder linkBuilder = new StringBuilder();
+
+        parseBody("]", linkBuilder);
+
+        builder.append("<a href=\'");
+        ++pointer;
+        char current = text.charAt(pointer);
+        while (current != ')') {
+            builder.append(current);
+            current = text.charAt(++pointer);
+        }
+        ++pointer;
+        builder.append("\'>");
+        builder.append(linkBuilder);
+        builder.append("</a>");
     }
 
-
+    public String convert() {
+        StringBuilder builder = new StringBuilder(text.length());
+        int blockSpecifier = parseHead(builder);
+        parseBody("", builder);
+        builder.append((blockSpecifier == 0 ? "</p>" : "</h" + blockSpecifier + ">"));
+        return builder.toString();
+    }
 }
