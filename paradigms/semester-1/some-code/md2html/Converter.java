@@ -2,163 +2,131 @@ package md2html;
 import java.util.*;
 
 public class Converter {
-    private static final Map<String, String> mdSymbols = Map.of(
-            "*", "em",
-            "**", "strong",
-            "++", "u",
-            "_", "em",
-            "__", "strong",
-            "--", "s",
-            "`", "code",
-            "~", "mark"
+    private static final Map<String, String> markup = Map.of(
+        "*", "em",
+        "**", "strong",
+        "++", "u",
+        "_", "em",
+        "__", "strong",
+        "--", "s",
+        "`", "code",
+        "~", "mark"
     );
 
-    private static final Map<Character, String> htmlSymbols = Map.of(
-            '<', "&lt;",
-            '>', "&gt;",
-            '&', "&amp;"
+    private static final Map<String, String> symbols = Map.of(
+        "<", "&lt;",
+        ">", "&gt;",
+        "&", "&amp;"
     );
 
-    private String text;
+    private String source;
     private int pointer;
+    StringBuilder builder;
 
-    public Converter(String text) {
-        this.text = text;
-        pointer = 0;
+    public Converter(String source) {
+        this.source = source + "\1\2";
+        this.pointer = 0;
+        this.builder = new StringBuilder(source.length());
     }
 
-    private int parseHead(StringBuilder builder) {
-        StringBuilder ignored = new StringBuilder();
-        while (text.charAt(pointer) == '#' && pointer < text.length() && pointer < 7) {
-            ignored.append(text.charAt(pointer++));
-        }
-        if (!Character.isWhitespace(text.charAt(pointer)) || pointer > 6 || pointer == 0) {
-            builder.insert(0, "<p>");
-            builder.append(ignored);
-            return 0;
-        }
-        builder.append("<h" + pointer + ">");
-        return ++pointer - 1;
+    private boolean closing(String opening, String sequence) {
+        return opening.equals(sequence);
     }
 
-    private boolean isOpeningMDSymbol(short length) {
-        if (pointer + length > text.length()) {
+    private boolean opening(String sequence) {
+        if (Character.isWhitespace(source.charAt(pointer + sequence.length()))){
             return false;
         }
-        if (!mdSymbols.containsKey(text.substring(pointer, pointer + length))) {
-            return false;
-        }
-        if (pointer + length + 1 > text.length()) {
-            return true;
-        }
-        return !(Character.isWhitespace(text.charAt(pointer + length + 1)));
+        return markup.containsKey(sequence);
     }
 
-    private boolean isClosingMDSymbol(short length) {
-        if (pointer == 0 || pointer + length > text.length()) {
-            return false;
+    private int textType() {
+        int type = 0;
+        while (source.charAt(type) == '#') {
+            ++type;
         }
-        return !Character.isWhitespace(text.charAt(pointer - 1));
-    }
-
-    private boolean alone() {
-        if (pointer == 0 || pointer + 1 >= text.length()) {
-            return false;
+        if (!Character.isWhitespace(source.charAt(type)) || type > 6) {
+            type = 0;
         }
-        return (Character.isWhitespace(text.charAt(pointer - 1)) && Character.isWhitespace(text.charAt(pointer + 1)));
+        return type;
     }
 
-    private void newBlock(String openingSequence, StringBuilder builder) {
-        pointer += openingSequence.length();
-        builder.append("<" + mdSymbols.get(openingSequence) + ">");
-        parseBody(openingSequence, builder);
-        builder.append("</" + mdSymbols.get(openingSequence) + ">");
+    private void parseLink() {
+        StringBuilder linkBuilder = new StringBuilder();
+        parse(linkBuilder, "]", false);
+        ++pointer;
+        builder.append("<a href=\'");
+        parse(builder, ")", true);
+        builder.append("\'>");
+        builder.append(linkBuilder);
+        builder.append("</a>");
+
     }
 
-    private void parseBody(String openingSequence, StringBuilder builder) {
-        while (pointer < text.length()) {
-            char current = text.charAt(pointer);
+    private void parse(StringBuilder builder, String opening, boolean ignoreMarkup) {
+        int closingLength = opening.length();
+        String[] sequences = new String[3];
 
-            if (htmlSymbols.keySet().contains(current)) {
-                builder.append(htmlSymbols.get(current));
+        while (source.charAt(pointer)!= '\1') {
+            sequences[1] = Character.toString(source.charAt(pointer));
+            sequences[2] = source.substring(pointer, pointer + 2);
+
+            if (closing(opening, sequences[closingLength])) {
+                pointer += closingLength;
+                return;
+            }
+            if (ignoreMarkup) {
                 ++pointer;
+                builder.append(sequences[1]);
                 continue;
             }
 
-            if (alone()) {
-                builder.append(current);
-                ++pointer;
+            if (opening(sequences[2])) {
+                pointer += 2;
+                newElement(builder, markup.get(sequences[2]), sequences[2]);
                 continue;
             }
 
-            if (current == '\\' && mdSymbols.containsKey(Character.toString(text.charAt(pointer + 1)))) {
-                builder.append(text.charAt(pointer + 1));
+            if (opening(sequences[1])) {
+                pointer += 1;
+                newElement(builder, markup.get(sequences[1]), sequences[1]);
+                continue;
+            }
+
+            if (sequences[1].equals("\\")) {
+                builder.append(source.charAt(pointer + 1));
                 pointer += 2;
                 continue;
             }
 
-            if (isClosingMDSymbol((short)1)) {
-                String sequence = text.substring(pointer, pointer + 1);
-                if (sequence.equals(openingSequence)) {
-                    ++pointer;
-                    return;
-                }
-            }
-
-            if (isClosingMDSymbol((short)2)) {
-                String sequence = text.substring(pointer, pointer + 2);
-                if (sequence.equals(openingSequence)) {
-                    pointer += 2;
-                    return;
-                }
-            }
-
-            if (current == '[' && pointer + 1 < text.length()) {
+            if (symbols.get(sequences[1]) != null) {
                 ++pointer;
-                parseLink(builder);
+                builder.append(symbols.get(sequences[1]));
                 continue;
             }
 
-            if (isOpeningMDSymbol((short)2)) {
-                String sequence = text.substring(pointer, pointer + 2);
-                newBlock(sequence, builder);
+            if (sequences[1].equals("[")) {
+                ++pointer;
+                parseLink();
                 continue;
             }
 
-            if (isOpeningMDSymbol((short)1)) {
-                String sequence = text.substring(pointer, pointer + 1);
-                newBlock(sequence, builder);
-                continue;
-            }
-
-            builder.append(current);
-            ++pointer;
+            builder.append(sequences[1]);
+            pointer++;
         }
     }
 
-    public void parseLink(StringBuilder builder) {
-        StringBuilder linkBuilder = new StringBuilder();
-
-        parseBody("]", linkBuilder);
-
-        builder.append("<a href=\'");
-        ++pointer;
-        char current = text.charAt(pointer);
-        while (current != ')') {
-            builder.append(current);
-            current = text.charAt(++pointer);
-        }
-        ++pointer;
-        builder.append("\'>");
-        builder.append(linkBuilder);
-        builder.append("</a>");
+    private void newElement(StringBuilder builder, String tag, String sequence) {
+        builder.append("<" + tag + ">");
+        parse(builder, sequence, false);
+        builder.append("</" + tag + ">");
     }
 
     public String convert() {
-        StringBuilder builder = new StringBuilder(text.length());
-        int blockSpecifier = parseHead(builder);
-        parseBody("", builder);
-        builder.append((blockSpecifier == 0 ? "</p>" : "</h" + blockSpecifier + ">"));
+        int textType = textType();
+        pointer = (textType == 0 ? 0 : textType + 1);
+
+        newElement(builder, (textType == 0 ? "p" : "h" + Integer.toString(textType)), "\1");
         return builder.toString();
     }
 }
