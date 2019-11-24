@@ -9,29 +9,17 @@ public class Reader {
         reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
     }
 
-    private boolean isBlank(String line) {
-        if (line.isEmpty()) {
-            return true;
-        }
-        for (int i = 0; i < line.length(); ++i) {
-            if (!Character.isWhitespace(line.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public String read() {
         StringBuilder builder = new StringBuilder();
 
         try {
             String next = reader.readLine();
 
-            while (next != null && isBlank(next)) {
+            while (next != null && next.isEmpty()) {
                 next = reader.readLine();
             }
-            while (next != null && !isBlank(next) && !next.isEmpty()) {
-                if (!isBlank(next)) {
+            while (next != null && !next.isEmpty() && !next.isEmpty()) {
+                if (!next.isEmpty()) {
                     builder.append(next + "\n");
                 }
                 next = reader.readLine();
