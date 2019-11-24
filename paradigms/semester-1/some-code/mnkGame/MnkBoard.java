@@ -2,7 +2,7 @@ package mnkGame;
 
 import java.util.Map;
 
-public class MnkBoard implements Board, Position {
+public class MnkBoard extends Board implements Position {
     private static final Map<Cell, Character> SYMBOLS = Map.of(
             Cell.X, 'X',
             Cell.O, 'O',
@@ -14,7 +14,7 @@ public class MnkBoard implements Board, Position {
     private Cell turn;
     private int blankCells;
 
-    public MnkBoard(int m, int n, int k) {
+    protected MnkBoard(int m, int n, int k) {
         if (m <= 0 || n <= 0 || k <= 0) {
             throw new IllegalArgumentException("Dimensions must be represented by positive numbers");
         }
@@ -42,12 +42,12 @@ public class MnkBoard implements Board, Position {
     }
 
     @Override
-    public Position getPosition() {
+    protected Position getPosition() {
         return this;
     }
 
     @Override
-    public Cell getCell() {
+    protected Cell getCell() {
         return turn;
     }
 
@@ -65,7 +65,7 @@ public class MnkBoard implements Board, Position {
     }
 
     @Override
-    public Result makeMove(final Move move) {
+    protected Result makeMove(final Move move) {
         if (!isValid(move)) {
             return Result.LOSE;
         }

@@ -1,7 +1,7 @@
 package mnkGame;
 
-public interface Board {
-    Position getPosition();
-    Cell getCell();
-    Result makeMove(Move move);
+public abstract class Board {
+    protected abstract Position getPosition();
+    protected abstract Cell getCell();
+    protected abstract Result makeMove(Move move);
 }
