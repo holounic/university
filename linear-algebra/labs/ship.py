@@ -21,18 +21,18 @@ def vector_mult(a, b):
 
 input_file = open('input.txt', 'r')
 output_file = open('output.txt','w')
-v = map(float, input_file.readline().split())
-a = map(float, input_file.readline().split())
-m = map(float, input_file.readline().split())
-w = map(float, input_file.readline().split())
-
+v = list(map(float, input_file.readline().split()))
+a = list(map(float, input_file.readline().split()))
+m = list(map(float, input_file.readline().split()))
+w = list(map(float, input_file.readline().split()))
+# map doesn't return list
 
 base = [0, 0, 1]
 right_arm = vector_mult(a, base)
 left_arm = vector_mult(base, a)
 m_ang = compute_angle(base, m)
 
-bad_guy = map(lambda x, y: x - y, w, v)
+bad_guy = list(map(lambda x, y: x - y, w, v))
 
 right_ang = compute_angle(right_arm, bad_guy)
 left_ang = compute_angle(left_arm, bad_guy)
