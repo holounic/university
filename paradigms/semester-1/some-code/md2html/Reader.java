@@ -29,11 +29,10 @@ public class Reader {
                 return null;
             }
 
-            builder.deleteCharAt(builder.length() - 1);
         } catch (IOException e) {
             System.out.println(e);
         }
-        return builder.toString();
+        return builder.toString().substring(0, builder.length() - 1);
     }
 
     public boolean close() {
