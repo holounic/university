@@ -1,10 +1,8 @@
 package expression;
 
-public interface Operand {
-    @Override
+public interface Operand extends Expression {
     String toString();
-    boolean equals(Operand toCompare);
     String toMiniString();
     Priority getPriority();
-    int evaluate(int x);
+    boolean equals(Operand toCompare);
 }

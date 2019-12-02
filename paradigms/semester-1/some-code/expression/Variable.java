@@ -1,8 +1,8 @@
 package expression;
 
-public class Variable implements Operand {
+public class Variable implements Operand, Expression {
     private final String variable;
-    private static final Priority priority = Priority.NULL;
+    private static final Priority priority = Priority.VAR;
 
     public Variable(String variable) {
         this.variable = variable;
@@ -21,6 +21,12 @@ public class Variable implements Operand {
     @Override
     public Priority getPriority() {
         return priority;
+    }
+
+    @Override
+    public boolean equals(Expression toCompare) {
+        System.out.println("comparing");
+        return equals((Operand) toCompare);
     }
 
     @Override

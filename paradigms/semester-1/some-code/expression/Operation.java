@@ -1,5 +1,7 @@
 package expression;
 
+import java.io.PrintStream;
+
 public abstract class Operation implements Operand {
     protected final Operand left;
     protected final Operand right;
@@ -29,12 +31,7 @@ public abstract class Operation implements Operand {
 
         StringBuilder expression = new StringBuilder();
 
-        if (priorityCurrent == Priority.LOW) {
-            expression.append(left.toMiniString()).append(" ")
-                    .append(getOperationSign()).append(" ").append(right.toMiniString());
-            return expression.toString();
-        }
-        if (priorityLeft == priorityCurrent || priorityLeft == Priority.NULL) {
+        if (priorityCurrent.value() <= priorityLeft.value()) {
             expression.append(left.toMiniString());
         } else {
             expression.append("(").append(left.toMiniString()).append(")");
@@ -42,7 +39,8 @@ public abstract class Operation implements Operand {
 
         expression.append(" ").append(getOperationSign()).append(" ");
 
-        if (priorityRight == priorityCurrent && priorityCurrent != Priority.HIGH_D || priorityRight == Priority.NULL) {
+        if (priorityCurrent.value() < priorityRight.value()
+                || priorityCurrent == priorityRight && priorityCurrent.subvalue() != 0) {
             expression.append(right.toMiniString());
         } else {
             expression.append("(").append(right.toMiniString()).append(")");
@@ -50,13 +48,18 @@ public abstract class Operation implements Operand {
         return expression.toString();
     }
 
-    public boolean equals(Operation toCompare) {
-        return this.getClass() == toCompare.getClass() && this.left.equals(toCompare.left)
+    private boolean equals(Operation toCompare) {
+        return this.getOperationSign() == toCompare.getOperationSign() && this.left.equals(toCompare.left)
                 && this.right.equals(toCompare.right);
     }
 
     @Override
     public boolean equals(Operand toCompare) {
+        return toCompare.equals(this);
+    }
+
+    @Override
+    public boolean equals(Expression toCompare) {
         return equals((Operation) toCompare);
     }
 

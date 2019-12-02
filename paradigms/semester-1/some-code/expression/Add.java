@@ -1,7 +1,7 @@
 package expression;
 
 public class Add extends Operation {
-    private static final Priority priority = Priority.LOW;
+    private static final Priority priority = Priority.LOW_A;
     private static final char operationSign = '+';
 
     public Add(Operand first, Operand second) {

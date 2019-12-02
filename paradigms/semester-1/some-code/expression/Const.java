@@ -2,7 +2,7 @@ package expression;
 
 public class Const implements Operand {
     private final int constant;
-    private static final Priority priority = Priority.NULL;
+    private static final Priority priority = Priority.VAR;
 
     public Const(int constant) {
         this.constant = constant;
@@ -16,6 +16,11 @@ public class Const implements Operand {
     @Override
     public boolean equals(Operand toCompare) {
         return  toCompare instanceof Const && Integer.toString(this.constant).equals(toCompare.toString());
+    }
+
+//    @Override
+    public boolean equals(Expression toCompare) {
+        return equals((Operand) toCompare);
     }
 
     @Override
