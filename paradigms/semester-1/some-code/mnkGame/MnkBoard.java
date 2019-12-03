@@ -123,8 +123,11 @@ public class MnkBoard extends Board implements Position {
             }
         }
 
+        count = 0;
+        
         for (int i = Math.max(0, row - this.target), j = Math.min(
-                cells[0].length - 1, row + target); i < Math.min(cells.length, row + target) && j >= Math.max(0, column - target); i++, j--) {
+                cells[0].length - 1, row + target); i < Math.min(
+                        cells.length, row + target) && j >= Math.max(0, column - target); i++, j--) {
             if (cells[i][j] == value) {
                 count++;
             } else {
