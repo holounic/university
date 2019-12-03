@@ -12,23 +12,28 @@ public class HumanPlayer implements Player {
         this.in = new Scanner(System.in);
     }
 
-
-    private int readInput() {
-        while (true) {
-            String s = in.next();
-            try {
-                return Integer.parseInt(s);
-            } catch (NumberFormatException e) {
-                out.println("Hey, stupid piece of shit, your input is not a number, fuck you!");
-            }
-        }
-    }
-
     @Override
     public Move makeMove(final Position position, final Cell cell) {
+        int x, y;
         while (true) {
-
-            final Move move = new Move(readInput(), readInput(), cell);
+            while (true) {
+                if (in.hasNextInt()) {
+                    x = in.nextInt();
+                } else {
+                    in.next();
+                    in.next();
+                    out.println("Hey, stupid piece of shit, your input is not a number, fuck you!");
+                    continue;
+                }
+                if (in.hasNextInt()) {
+                    y = in.nextInt();
+                    break;
+                } else {
+                    in.next();
+                    out.println("Hey, stupid piece of shit, your input is not a number, fuck you!");
+                }
+            }
+            final Move move = new Move(x, y, cell);
             if (position.isValid(move)) {
                 return move;
             }
