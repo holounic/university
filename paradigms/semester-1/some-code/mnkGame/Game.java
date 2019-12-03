@@ -9,6 +9,7 @@ public class Game {
     }
 
     public int play(Board board) {
+        log(board.toString());
         while (true) {
             final int result1 = move(board, player1, 1);
             if (result1 != -1) {
@@ -26,17 +27,19 @@ public class Game {
         final Result result = board.makeMove(move);
         log("Player " + no + " move: " + move);
         log("Position:\n" + board);
-        if (result == Result.WIN) {
-            log("Player " + no + " won");
-            return no;
-        } else if (result == Result.LOSE) {
-            log("Player " + no + " lose");
-            return 3 - no;
-        } else if (result == Result.DRAW) {
-            log("Draw");
-            return 0;
-        } else {
-            return -1;
+
+        switch(result) {
+            case WIN:
+                log("Player " + no + " won");
+                return no;
+            case LOSE:
+                log("Player " + no + " lose");
+                return 3 - no;
+            case DRAW:
+                log("Draw");
+                return 0;
+            default:
+                    return -1;
         }
     }
 

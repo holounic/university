@@ -21,11 +21,10 @@ public class MnkBoard extends Board implements Position {
         if (k > Math.max(m, n)) {
             throw new IllegalArgumentException("Unreal game");
         }
-
         this.target = k;
         cells = new Cell[m][n];
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 cells[i][j] = Cell.E;
             }
         }
@@ -34,11 +33,11 @@ public class MnkBoard extends Board implements Position {
     }
 
     private void nextTurn() {
-        if (this.turn == Cell.X) {
+        if (this.turn  == Cell.X) {
             this.turn = Cell.O;
-            return;
+        } else {
+            this.turn = Cell.X;
         }
-        this.turn = Cell.X;
     }
 
     @Override
@@ -71,7 +70,7 @@ public class MnkBoard extends Board implements Position {
         }
 
         cells[move.getRow()][move.getColumn()] = move.getValue();
-        --blankCells;
+        blankCells--;
         nextTurn();
         return checkResult(move);
     }
@@ -86,9 +85,9 @@ public class MnkBoard extends Board implements Position {
         }
 
         int count = 0;
-        for (int i = Math.max(0, row - this.target); i < Math.min(row + target, cells.length); ++i) {
+        for (int i = Math.max(0, row - this.target); i < Math.min(row + target, cells.length); i++) {
             if (cells[i][column] == value) {
-                ++count;
+                count++;
             } else {
                 count = 0;
             }
@@ -98,9 +97,9 @@ public class MnkBoard extends Board implements Position {
         }
 
         count = 0;
-        for (int j = Math.max(0, column - this.target); j < Math.min(column + target, cells[0].length); ++j) {
+        for (int j = Math.max(0, column - this.target); j < Math.min(column + target, cells[0].length); j++) {
             if (cells[row][j] == value) {
-                ++count;
+                count++;
             } else {
                 count = 0;
             }
@@ -113,9 +112,9 @@ public class MnkBoard extends Board implements Position {
 
         for (int i = Math.max(0, row - this.target + 1), j = Math.max(
                 0, column - this.target + 1); i < Math.min(cells.length, row + target) && j < Math.min(
-                        cells[0].length, row + target); ++i, ++j) {
+                        cells[0].length, row + target); i++, j++) {
             if (cells[i][j] == value) {
-                ++count;
+                count++;
             } else {
                 count = 0;
             }
@@ -125,9 +124,9 @@ public class MnkBoard extends Board implements Position {
         }
 
         for (int i = Math.max(0, row - this.target), j = Math.min(
-                cells[0].length - 1, row + target); i < Math.min(cells.length, row + target) && j >= Math.max(0, column - target); ++i, --j) {
+                cells[0].length - 1, row + target); i < Math.min(cells.length, row + target) && j >= Math.max(0, column - target); i++, j--) {
             if (cells[i][j] == value) {
-                ++count;
+                count++;
             } else {
                 count = 0;
             }
@@ -142,8 +141,8 @@ public class MnkBoard extends Board implements Position {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < cells.length; ++i) {
-            for (int j = 0; j < cells[i].length; ++j) {
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[i].length; j++) {
                 builder.append(SYMBOLS.get(cells[i][j]));
                 builder.append(" ");
             }

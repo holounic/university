@@ -12,20 +12,14 @@ public class HumanPlayer implements Player {
         this.in = new Scanner(System.in);
     }
 
-    private boolean isInteger(String s) {
-        for (int  i = 0; i < s.length(); ++i) {
-            if (s.charAt(i) - '0' < 0 || s.charAt(i) - '0' > 9) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     private int readInput() {
         while (true) {
             String s = in.next();
-            if (isInteger(s)) {
+            try {
                 return Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                out.println("Hey, stupid piece of shit, your input is not a number, fuck you!");
             }
         }
     }
