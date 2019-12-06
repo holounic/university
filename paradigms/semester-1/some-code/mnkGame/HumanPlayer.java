@@ -1,15 +1,22 @@
 package mnkGame;
 
 import java.io.PrintStream;
+import java.util.Random;
 import java.util.Scanner;
 
 public class HumanPlayer implements Player {
     private final PrintStream out;
     private final Scanner in;
+    private final int id;
 
-    public HumanPlayer() {
+    public HumanPlayer(int id) {
         this.out = System.out;
         this.in = new Scanner(System.in);
+        this.id = id;
+    }
+
+    public HumanPlayer() {
+        this(new Random().nextInt());
     }
 
     @Override
@@ -22,7 +29,7 @@ public class HumanPlayer implements Player {
                 } else {
                     in.next();
                     in.next();
-                    out.println("Hey, stupid piece of shit, your input is not a number, fuck you!");
+                    out.println("Hey, that's not a number, buddy!!");
                     continue;
                 }
                 if (in.hasNextInt()) {
@@ -30,7 +37,7 @@ public class HumanPlayer implements Player {
                     break;
                 } else {
                     in.next();
-                    out.println("Hey, stupid piece of shit, your input is not a number, fuck you!");
+                    out.println("Hey, u better stop making fun of me! Please manage to input NUMBERS!");
                 }
             }
             final Move move = new Move(x, y, cell);
@@ -39,5 +46,10 @@ public class HumanPlayer implements Player {
             }
             out.println("Move " + move + " is invalid");
         }
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 }

@@ -2,7 +2,7 @@ package mnkGame;
 
 import java.util.Map;
 
-public class MnkBoard extends Board implements Position {
+public class MnkBoard extends Board implements Position, PrivateBoard {
     private static final Map<Cell, Character> SYMBOLS = Map.of(
             Cell.X, 'X',
             Cell.O, 'O',
@@ -14,7 +14,7 @@ public class MnkBoard extends Board implements Position {
     private Cell turn;
     private int blankCells;
 
-    protected MnkBoard(int m, int n, int k) {
+    public MnkBoard(int m, int n, int k) {
         if (m <= 0 || n <= 0 || k <= 0) {
             throw new IllegalArgumentException("Dimensions must be represented by positive numbers");
         }
@@ -41,12 +41,12 @@ public class MnkBoard extends Board implements Position {
     }
 
     @Override
-    protected Position getPosition() {
+    public Position getPosition() {
         return this;
     }
 
     @Override
-    protected Cell getCell() {
+    public  Cell getCell() {
         return turn;
     }
 
@@ -64,7 +64,7 @@ public class MnkBoard extends Board implements Position {
     }
 
     @Override
-    protected Result makeMove(final Move move) {
+    public Result makeMove(final Move move) {
         if (!isValid(move)) {
             return Result.LOSE;
         }
@@ -75,70 +75,85 @@ public class MnkBoard extends Board implements Position {
         return checkResult(move);
     }
 
-    private Result checkResult(final Move move) {
+    private Result multiChecker(Cell value, int i, int iEnd, int j, int jEnd) {
+        int count = 0;
+        boolean iStatic = (i == iEnd);
+        boolean jStatic = (j == jEnd);
+
+        while ((i != iEnd || iStatic ) && (j != jEnd || jStatic)) {
+            if (cells[i][j] == value) {
+                count++;
+            } else {
+                count = 0;
+            }
+            if (count == this.target) {
+                this.clear();
+                return Result.WIN;
+            }
+            if (i < iEnd) {
+                i++;
+            }
+            if (i > iEnd) {
+                i--;
+            }
+            if (j < jEnd) {
+                j++;
+            }
+            if (j > jEnd) {
+                j--;
+            }
+
+        }
+        return Result.UNKNOWN;
+    }
+
+    public Result checkResult(final Move move) {
         int row = move.getRow();
         int column = move.getColumn();
         Cell value = move.getValue();
 
         if (blankCells == 0) {
+            clear();
             return Result.DRAW;
         }
 
-        int count = 0;
-        for (int i = Math.max(0, row - this.target); i < Math.min(row + target, cells.length); i++) {
-            if (cells[i][column] == value) {
-                count++;
-            } else {
-                count = 0;
-            }
-            if (count == this.target) {
-                return Result.WIN;
-            }
+        Result horizontal = multiChecker(value, Math.max(0, row - this.target), Math.min(row + target, cells.length), column, column);
+        if (horizontal == Result.WIN) {
+            return horizontal;
         }
 
-        count = 0;
-        for (int j = Math.max(0, column - this.target); j < Math.min(column + target, cells[0].length); j++) {
-            if (cells[row][j] == value) {
-                count++;
-            } else {
-                count = 0;
-            }
-            if (count == this.target) {
-                return Result.WIN;
-            }
+        Result verticle = multiChecker(value, row, row, Math.max(0, column - this.target), Math.min(column + target, cells[0].length));
+        if (verticle == Result.WIN) {
+            return verticle;
         }
 
-        count = 0;
-
-        for (int i = Math.max(0, row - this.target + 1), j = Math.max(
-                0, column - this.target + 1); i < Math.min(cells.length, row + target) && j < Math.min(
-                        cells[0].length, row + target); i++, j++) {
-            if (cells[i][j] == value) {
-                count++;
-            } else {
-                count = 0;
-            }
-            if (count == this.target) {
-                return Result.WIN;
-            }
+        Result mainDiagonal = multiChecker(value, Math.max(0, row - this.target + 1), Math.min(cells.length, row + target), Math.max(
+                0, column - this.target + 1), Math.min(cells[0].length, row + target));
+        if (mainDiagonal == Result.WIN) {
+            return mainDiagonal;
         }
 
-        count = 0;
-        
-        for (int i = Math.max(0, row - this.target), j = Math.min(
-                cells[0].length - 1, row + target); i < Math.min(
-                        cells.length, row + target) && j >= Math.max(0, column - target); i++, j--) {
-            if (cells[i][j] == value) {
-                count++;
-            } else {
-                count = 0;
-            }
-            if (count == this.target) {
-                return Result.WIN;
-            }
+        Result adversDiagonal = multiChecker(value, Math.max(0, row - this.target), Math.min(cells.length, row + target),
+                Math.min(cells[0].length - 1, row + target), Math.max(0, column - target) - 1);
+        if (adversDiagonal == Result.WIN) {
+            return adversDiagonal;
         }
 
         return Result.UNKNOWN;
+    }
+
+    private void clear() {
+        log(this.toString());
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[0].length; j++) {
+                cells[i][j] = Cell.E;
+                blankCells = cells.length * cells[0].length;
+            }
+        }
+    }
+
+    private void log(String s) {
+        System.out.println(s);
     }
 
     @Override

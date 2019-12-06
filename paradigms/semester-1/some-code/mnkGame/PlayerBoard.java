@@ -1,27 +1,30 @@
 package mnkGame;
 
-public class PlayerBoard extends MnkBoard {
+public class PlayerBoard extends Board {
+    private MnkBoard board;
 
     public PlayerBoard(int m, int n, int k) {
-        super(m, n, k);
+        board = new MnkBoard(m, n, k);
     }
 
     public PlayerBoard() {
-        super(3, 3, 3);
+        board = new MnkBoard(3, 3, 3);
     }
 
-    @Override
     public Result makeMove(final Move move) {
-        return super.makeMove(move);
+        return this.board.makeMove(move);
     }
 
-    @Override
     public Position getPosition() {
-        return super.getPosition();
+        return board.getPosition();
+    }
+    public Cell getCell() {
+        return board.getCell();
     }
     @Override
-    public Cell getCell() {
-        return super.getCell();
+    public String toString() {
+        return board.toString();
     }
+
 
 }
