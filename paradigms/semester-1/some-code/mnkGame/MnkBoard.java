@@ -113,26 +113,22 @@ public class MnkBoard extends Board implements Position, PrivateBoard {
         Cell value = move.getValue();
 
         if (blankCells == 0) {
-            clear();
             return Result.DRAW;
         }
 
         Result horizontal = multiChecker(value, Math.max(0, row - this.target), Math.min(row + target, cells.length), column, column);
         if (horizontal == Result.WIN) {
-            clear();
             return horizontal;
         }
 
         Result verticle = multiChecker(value, row, row, Math.max(0, column - this.target), Math.min(column + target, cells[0].length));
         if (verticle == Result.WIN) {
-            clear();
             return verticle;
         }
 
         Result mainDiagonal = multiChecker(value, Math.max(0, row - this.target + 1), Math.min(cells.length, row + target), Math.max(
                 0, column - this.target + 1), Math.min(cells[0].length, row + target));
         if (mainDiagonal == Result.WIN) {
-            clear();
             return mainDiagonal;
         }
 
