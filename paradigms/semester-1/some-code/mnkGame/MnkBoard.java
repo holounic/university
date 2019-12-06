@@ -119,23 +119,27 @@ public class MnkBoard extends Board implements Position, PrivateBoard {
 
         Result horizontal = multiChecker(value, Math.max(0, row - this.target), Math.min(row + target, cells.length), column, column);
         if (horizontal == Result.WIN) {
+            clear();
             return horizontal;
         }
 
         Result verticle = multiChecker(value, row, row, Math.max(0, column - this.target), Math.min(column + target, cells[0].length));
         if (verticle == Result.WIN) {
+            clear();
             return verticle;
         }
 
         Result mainDiagonal = multiChecker(value, Math.max(0, row - this.target + 1), Math.min(cells.length, row + target), Math.max(
                 0, column - this.target + 1), Math.min(cells[0].length, row + target));
         if (mainDiagonal == Result.WIN) {
+            clear();
             return mainDiagonal;
         }
 
         Result adversDiagonal = multiChecker(value, Math.max(0, row - this.target), Math.min(cells.length, row + target),
                 Math.min(cells[0].length - 1, row + target), Math.max(0, column - target) - 1);
         if (adversDiagonal == Result.WIN) {
+            clear();
             return adversDiagonal;
         }
 
@@ -159,10 +163,15 @@ public class MnkBoard extends Board implements Position, PrivateBoard {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
+        builder.append("  ");
+        for (int j = 0; j < cells[0].length; j++) {
+            builder.append(j).append(" ");
+        }
+        builder.append('\n');
         for (int i = 0; i < cells.length; i++) {
+            builder.append(i).append(" ");
             for (int j = 0; j < cells[i].length; j++) {
-                builder.append(SYMBOLS.get(cells[i][j]));
-                builder.append(" ");
+                builder.append(SYMBOLS.get(cells[i][j])).append(" ");
             }
             builder.append('\n');
         }
