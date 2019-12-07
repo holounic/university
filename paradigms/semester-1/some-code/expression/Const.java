@@ -1,7 +1,7 @@
 package expression;
 
 public class Const implements Operand {
-    private final int constant;
+    public final int constant;
     private static final Priority priority = Priority.VAR;
 
     public Const(int constant) {
@@ -11,16 +11,6 @@ public class Const implements Operand {
     @Override
     public String toString() {
         return Integer.toString(this.constant);
-    }
-
-    @Override
-    public boolean equals(Operand toCompare) {
-        return  toCompare instanceof Const && Integer.toString(this.constant).equals(toCompare.toString());
-    }
-
-//    @Override
-    public boolean equals(Expression toCompare) {
-        return equals((Operand) toCompare);
     }
 
     @Override
@@ -37,5 +27,22 @@ public class Const implements Operand {
     public int evaluate(int x) {
         return this.constant;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null) {
+            return false;
+        }
+        if (object == this) {
+            return true;
+        }
+        if (object.getClass() != getClass()) {
+            return false;
+        }
+
+        Const toCompare = (Const)object;
+        return constant == toCompare.constant;
+    }
+
 
 }

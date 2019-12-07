@@ -1,10 +1,8 @@
 package expression;
 
-import java.io.PrintStream;
-
 public abstract class Operation implements Operand {
-    protected final Operand left;
-    protected final Operand right;
+    public final Operand left;
+    public final Operand right;
 
     public Operation(Operand left, Operand right) {
         this.left = left;
@@ -48,20 +46,21 @@ public abstract class Operation implements Operand {
         return expression.toString();
     }
 
-    private boolean equals(Operation toCompare) {
-        return this.getOperationSign() == toCompare.getOperationSign() && this.left.equals(toCompare.left)
-                && this.right.equals(toCompare.right);
+    @Override
+    public boolean equals(Object object) {
+        if (object == null) {
+            return false;
+        }
+        if (object == this) {
+            return true;
+        }
+        if (getClass() != object.getClass()) {
+            return false;
+        }
+        Operation toCompare = (Operation)object;
+        return this.right.equals(toCompare.right) && this.left.equals(toCompare.left);
     }
 
-    @Override
-    public boolean equals(Operand toCompare) {
-        return toCompare.equals(this);
-    }
-
-    @Override
-    public boolean equals(Expression toCompare) {
-        return equals((Operation) toCompare);
-    }
 
     public int evaluate(int x) {
         int leftValue = left.evaluate(x);

@@ -1,7 +1,7 @@
 package expression;
 
 public class Variable implements Operand, Expression {
-    private final String variable;
+    public final String variable;
     private static final Priority priority = Priority.VAR;
 
     public Variable(String variable) {
@@ -14,19 +14,23 @@ public class Variable implements Operand, Expression {
     }
 
     @Override
-    public boolean equals(Operand toCompare) {
-        return this.variable.equals(toCompare.toString()) && toCompare instanceof Variable;
-    }
-
-    @Override
     public Priority getPriority() {
         return priority;
     }
 
     @Override
-    public boolean equals(Expression toCompare) {
-        System.out.println("comparing");
-        return equals((Operand) toCompare);
+    public boolean equals(Object object) {
+        if (object == null) {
+            return false;
+        }
+        if (object == this) {
+            return true;
+        }
+        if (object.getClass() != getClass()) {
+            return false;
+        }
+        Variable toCompare = (Variable)object;
+        return this.variable.equals(toCompare.variable);
     }
 
     @Override
