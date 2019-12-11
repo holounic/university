@@ -1,22 +1,21 @@
 package mnkGame;
 
 import java.io.PrintStream;
-import java.util.Random;
 import java.util.Scanner;
 
 public class HumanPlayer implements Player {
     private final PrintStream out;
     private final Scanner in;
-    private final int id;
+    private final String nickName;
 
-    public HumanPlayer(int id) {
+    public HumanPlayer(String nickName) {
         this.out = System.out;
         this.in = new Scanner(System.in);
-        this.id = id;
+        this.nickName = nickName;
     }
 
     public HumanPlayer() {
-        this(new Random().nextInt());
+        this("id" + System.currentTimeMillis());
     }
 
     @Override
@@ -49,7 +48,7 @@ public class HumanPlayer implements Player {
     }
 
     @Override
-    public int getId() {
-        return id;
+    public String getNickName() {
+        return nickName;
     }
 }

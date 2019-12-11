@@ -1,5 +1,8 @@
 package mnkGame;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Game {
     private Player player1, player2;
 
@@ -15,23 +18,36 @@ public class Game {
     }
 
     public int series(Board board, int rounds) {
-        int[] res = new int[2];
+        Map<String, Integer> results = new HashMap<>();
+        String nickName1 = player1.getNickName();
+        String nickName2 = player2.getNickName();
+        results.put(nickName1, 0);
+        results.put(nickName2, 0);
 
-        while (res[0] + res[1] != rounds) {
-            log("first move " + player1.getId() + " second move " + player2.getId());
+        log("Are you ready for the most epic battle?\n" + nickName1 + " VS " + nickName2);
+
+        while (results.get(nickName1) + results.get(nickName2) != rounds) {
+            log("____________________________");
+            log(player1.getNickName() + " begins");
             int result = this.play(board);
             switch (result) {
                 case 1:
-                    res[player1.getId()]++;
+                    results.replace(player1.getNickName(), results.get(player1.getNickName()) + 1);
                     break;
                 case 2:
-                    res[player2.getId()]++;
+                    results.replace(player2.getNickName(), results.get(player2.getNickName()) + 1);
                     continue;
             }
             swapPlayers();
         }
-        log((res[0] > res[1] ? "first" : "second") + " player wins");
-        return (res[0] > res[1] ? 1 : 2);
+
+        if ((results.get(nickName1) == results.get(nickName2))) {
+            log("draw");
+            return -1;
+        }
+        log((results.get(nickName1) > results.get(nickName2) ?
+                nickName1 : nickName2) + " wins");
+        return (results.get(nickName1) > results.get(nickName2) ? 1 : 2);
     }
 
     public int play(Board board) {

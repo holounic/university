@@ -80,7 +80,7 @@ public class MnkBoard extends Board implements Position, PrivateBoard {
         boolean iStatic = (i == iEnd);
         boolean jStatic = (j == jEnd);
 
-        while ((i != iEnd || iStatic ) && (j != jEnd || jStatic)) {
+        while ((i != iEnd || iStatic ) && (j != jEnd || jStatic)){
             if (cells[i][j] == value) {
                 count++;
             } else {
@@ -126,16 +126,21 @@ public class MnkBoard extends Board implements Position, PrivateBoard {
             return verticle;
         }
 
-        Result mainDiagonal = multiChecker(value, Math.max(0, row - this.target + 1), Math.min(cells.length, row + target), Math.max(
-                0, column - this.target + 1), Math.min(cells[0].length, row + target));
+        int deltaXStart = row - Math.max(0, row - this.target);
+        int deltaYStart = column - Math.max(0, column - this.target + 1);
+        int delta = Math.min(deltaXStart, deltaYStart);
+
+        Result mainDiagonal = multiChecker(value, row - delta, Math.min(cells.length, row + target), column - delta, Math.min(cells[0].length, row + target));
         if (mainDiagonal == Result.WIN) {
             return mainDiagonal;
         }
 
-        Result adversDiagonal = multiChecker(value, Math.max(0, row - this.target), Math.min(cells.length, row + target),
-                Math.min(cells[0].length - 1, row + target), Math.max(0, column - target) - 1);
+        deltaYStart = Math.min(cells[0].length - 1, column + target) - column;
+        delta = Math.min(deltaXStart, deltaYStart);
+
+        Result adversDiagonal = multiChecker(value, row - delta, Math.min(cells.length, row + target),
+                column + delta, Math.max(0, column - target) - 1);
         if (adversDiagonal == Result.WIN) {
-            clear();
             return adversDiagonal;
         }
 
