@@ -1,15 +1,16 @@
 package mnkGame;
 
+import java.util.Arrays;
 import java.util.Map;
 
-public class MnkBoard extends Board implements Position, PrivateBoard {
+public class MnkBoard extends Board implements Position {
     private static final Map<Cell, Character> SYMBOLS = Map.of(
             Cell.X, 'X',
             Cell.O, 'O',
             Cell.E, '.'
     );
 
-    private final Cell[][] cells;
+    protected Cell[][] cells;
     private final int target;
     private Cell turn;
     private int blankCells;
@@ -42,7 +43,7 @@ public class MnkBoard extends Board implements Position, PrivateBoard {
 
     @Override
     public Position getPosition() {
-        return this;
+        return new ScreenBoard(cells);
     }
 
     @Override
