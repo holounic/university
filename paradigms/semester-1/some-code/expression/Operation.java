@@ -46,6 +46,36 @@ public abstract class Operation implements Operand {
         return expression.toString();
     }
 
+    private int evaluate(int leftValue, int rightValue) {
+        switch(getOperationSign()) {
+            case('+'):
+                return leftValue + rightValue;
+            case('*'):
+                return  leftValue * rightValue;
+            case('-'):
+                return leftValue - rightValue;
+            case ('/'):
+                return leftValue / rightValue;
+                default:
+                    return 0;
+        }
+    }
+
+    @Override
+    public int evaluate(int x, int y, int z) {
+        int leftValue = left.evaluate(x, y, z);
+        int rightValue = right.evaluate(x, y, z);
+        return evaluate(leftValue, rightValue);
+    }
+
+    @Override
+    public int evaluate(int x) {
+        int leftValue = left.evaluate(x);
+        int rightValue = right.evaluate(x);
+        return evaluate(leftValue, rightValue);
+    }
+
+
     @Override
     public boolean equals(Object object) {
         if (object == null) {
@@ -61,21 +91,8 @@ public abstract class Operation implements Operand {
         return this.right.equals(toCompare.right) && this.left.equals(toCompare.left);
     }
 
-
-    public int evaluate(int x) {
-        int leftValue = left.evaluate(x);
-        int rightValue = right.evaluate(x);
-        switch(getOperationSign()) {
-            case('+'):
-                return leftValue + rightValue;
-            case('*'):
-                return  leftValue * rightValue;
-            case('-'):
-                return leftValue - rightValue;
-            case('/'):
-                return leftValue / rightValue;
-        }
-        return 0;
+    @Override
+    public int hashCode() {
+       return toString().hashCode();
     }
-
 }

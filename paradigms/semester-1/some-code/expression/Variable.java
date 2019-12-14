@@ -1,7 +1,7 @@
 package expression;
 
-public class Variable implements Operand, Expression {
-    public final String variable;
+public class Variable implements Operand {
+    private final String variable;
     private static final Priority priority = Priority.VAR;
 
     public Variable(String variable) {
@@ -38,8 +38,25 @@ public class Variable implements Operand, Expression {
         return this.variable;
     }
 
+    @Override
+    public int evaluate(int x, int y, int z) {
+        switch (variable) {
+            case("x"):
+                return x;
+            case("y"):
+                return y;
+            default:
+                return z;
+        }
+    }
+
+    @Override
     public int evaluate(int x) {
         return x;
     }
 
+    @Override
+    public int hashCode() {
+        return  toString().hashCode();
+    }
 }
