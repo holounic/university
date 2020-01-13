@@ -22,9 +22,10 @@
 * [WordStatIndex](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/WordStatIndex)
 * [Markup](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/markup)
 * [North-Western Russia regional contest](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/north-western-russia-regional-contest)
-* [md2html](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/md2html) my very first parser
-* [mnkGame](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/mnkGame)
-* [expression](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/expression)
+* [Md2html](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/md2html) my very first parser
+* [MnkGame](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/mnkGame)
+* [Expression](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/expression)
+* [Expression parser](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/parser) my very second parser
 
 ## [Линал](https://github.com/holounic/university/tree/master/linear-algebra/labs)
 * [Matrix operations](https://github.com/holounic/university/blob/master/linear-algebra/labs/matrix-algebra.py)
