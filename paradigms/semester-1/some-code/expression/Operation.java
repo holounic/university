@@ -1,10 +1,10 @@
 package expression;
 
 public abstract class Operation implements Operand {
-    public final Operand left;
-    public final Operand right;
+    protected final Operand left;
+    protected final Operand right;
 
-    public Operation(Operand left, Operand right) {
+    protected Operation(Operand left, Operand right) {
         this.left = left;
         this.right = right;
     }
@@ -46,34 +46,7 @@ public abstract class Operation implements Operand {
         return expression.toString();
     }
 
-    private int evaluate(int leftValue, int rightValue) {
-        switch(getOperationSign()) {
-            case('+'):
-                return leftValue + rightValue;
-            case('*'):
-                return  leftValue * rightValue;
-            case('-'):
-                return leftValue - rightValue;
-            case ('/'):
-                return leftValue / rightValue;
-                default:
-                    return 0;
-        }
-    }
 
-    @Override
-    public int evaluate(int x, int y, int z) {
-        int leftValue = left.evaluate(x, y, z);
-        int rightValue = right.evaluate(x, y, z);
-        return evaluate(leftValue, rightValue);
-    }
-
-    @Override
-    public int evaluate(int x) {
-        int leftValue = left.evaluate(x);
-        int rightValue = right.evaluate(x);
-        return evaluate(leftValue, rightValue);
-    }
 
 
     @Override

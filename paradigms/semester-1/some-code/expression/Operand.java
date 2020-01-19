@@ -1,6 +1,6 @@
 package expression;
 
-public interface Operand extends TripleExpression, Expression {
+public interface Operand extends Expression, TripleExpression {
     String toString();
     String toMiniString();
     Priority getPriority();

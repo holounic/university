@@ -1,5 +1,7 @@
 package expression;
 
+import java.util.Objects;
+
 public class Const implements Operand {
     private final int constant;
     private static final Priority priority = Priority.VAR;
@@ -29,7 +31,7 @@ public class Const implements Operand {
     }
 
     @Override
-    public int evaluate(int x) {return this.constant;}
+    public int evaluate(int x) {return constant;}
 
     @Override
     public boolean equals(Object object) {
@@ -49,6 +51,6 @@ public class Const implements Operand {
 
     @Override
     public int hashCode() {
-        return toString().hashCode();
+        return Objects.hashCode(constant);
     }
 }
