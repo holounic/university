@@ -37,7 +37,7 @@ public class ExpressionParser implements Parser {
     }
 
     private char nextChar() {
-        if (pointer >= expression.length()) {
+        if (pointer >= expression.length() - 1) {
             return END;
         }
         return expression.charAt(++pointer);
@@ -100,11 +100,10 @@ public class ExpressionParser implements Parser {
         return identifier.toString();
     }
 
-    private Expression number() throws ParsingException {
+    private TripleExpression number() throws ParsingException {
         currentOperation = Operation.NONE;
         skipWhiteSpace();
-
-        if (Character.isDigit(getChar()) || getChar() == '-' && Character.isDigit(nextChar())) {
+        if (Character.isDigit(getChar()) || getChar() == '-' && Character.isDigit(getChar(pointer + 1))) {
             String number = readNumber();
             try {
                 return new Const(Integer.parseInt(number));
@@ -113,11 +112,20 @@ public class ExpressionParser implements Parser {
                 throw new ParsingException("Wrong number format", pointer);
             }
         }
-
+        if (getChar() == '-' && Character.isAlphabetic(getChar(pointer + 1))) {
+            nextChar();
+            String variable = identifier();
+            if (variables.contains(variable)) {
+                return new CheckedNegate(variable);
+            }
+            pointer -= variable.length();
+            throw new ParsingException("Wrong number format", pointer);
+        }
         if (test('(')) {
             int begin = pointer;
             pointer++;
-            Expression inner = addSub();
+            TripleExpression inner = addSub();
+            skipWhiteSpace();
             if (testNext(')')) {
                 nextChar();
                 return inner;
@@ -125,7 +133,6 @@ public class ExpressionParser implements Parser {
             pointer = begin;
             throw new ParsingException("Mismatched parenthesis ", pointer);
         }
-
         if (!test(END)) {
             String identifier = identifier();
             if (variables.contains(identifier)) {
@@ -137,16 +144,16 @@ public class ExpressionParser implements Parser {
         throw new ParsingException("Expected value, found something else", pointer);
     }
 
-    private Expression mulDiv() throws ParsingException {
-        Expression left = number();
+    private TripleExpression mulDiv() throws ParsingException {
+        TripleExpression left = number();
         while (true) {
             currentOperation = operation();
             switch (currentOperation) {
                 case MUL:
-                    left =  new Multiply((Operand) left, (Operand) number());
+                    left =  new CheckedMultiply((Operand) left, (Operand) number());
                     break;
                 case DIV:
-                    left =  new Divide((Operand) left, (Operand) number());
+                    left =  new CheckedDivide((Operand) left, (Operand) number());
                     break;
                 default:
                     return left;
@@ -154,15 +161,15 @@ public class ExpressionParser implements Parser {
         }
 
     }
-    private Expression addSub() throws ParsingException {
-        Expression left = mulDiv();
+    private TripleExpression addSub() throws ParsingException {
+        TripleExpression left = mulDiv();
         while (true) {
             switch (currentOperation) {
                 case ADD:
-                    left =  new Add((Operand) left, (Operand) mulDiv());
+                    left =  new CheckedAdd((Operand) left, (Operand) mulDiv());
                     break;
                 case SUB:
-                    left = new Subtract((Operand) left, (Operand) mulDiv());
+                    left = new CheckedSubtract((Operand) left, (Operand) mulDiv());
                     break;
                 default:
                     return left;
@@ -171,8 +178,8 @@ public class ExpressionParser implements Parser {
     }
 
     @Override
-    public Expression parse() throws ParsingException {
-        Expression result = addSub();
+    public TripleExpression parse() throws ParsingException {
+        TripleExpression result = addSub();
         if (!test(END)) {
             throw new ParsingException("Expected end, found " + getChar(), pointer);
         }

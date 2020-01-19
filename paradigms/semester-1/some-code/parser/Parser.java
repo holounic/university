@@ -1,7 +1,7 @@
 package parser;
 
-import expression.Expression;
+import expression.TripleExpression;
 
 public interface Parser {
-    Expression parse() throws ParsingException;
+    TripleExpression parse() throws ParsingException;
 }
