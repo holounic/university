@@ -30,3 +30,4 @@
 ## [Линал](https://github.com/holounic/university/tree/master/linear-algebra/labs)
 * [Matrix operations](https://github.com/holounic/university/blob/master/linear-algebra/labs/matrix-algebra.py)
 * [Ship](https://github.com/holounic/university/blob/master/linear-algebra/labs/ship.py)
+* [Ray tracing](https://github.com/holounic/university/blob/master/linear-algebra/labs/ray-tracing.py)
