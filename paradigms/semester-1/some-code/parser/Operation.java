@@ -1,4 +1,4 @@
-package parser;
+package expression.parser;
 
 public enum Operation {
     ADD,

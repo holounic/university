@@ -1,4 +1,4 @@
-package parser;
+package expression.parser;
 
 public class ParsingException extends Exception {
     public ParsingException(String format, int index, Object... args) {

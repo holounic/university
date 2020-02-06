@@ -1,13 +1,16 @@
-package parser;
+package expression.parser;
 
 import expression.*;
 
+import java.text.ParseException;
 import java.util.Map;
 import java.util.Set;
 
 public class ExpressionParser implements Parser {
-    public ExpressionParser(String expression) {
-        this.expression = expression + END;
+    public ExpressionParser() {}
+
+    public ExpressionParser(String source) {
+        this.expression = source + END;
     }
     private static final Set<String> variables = Set.of(
             "x", "y", "z"
@@ -178,6 +181,13 @@ public class ExpressionParser implements Parser {
     }
 
     @Override
+    public TripleExpression parse(String source) throws ParsingException {
+        this.expression = source + END;
+        TripleExpression result = parse();
+        pointer = 0;
+        return result;
+    }
+
     public TripleExpression parse() throws ParsingException {
         TripleExpression result = addSub();
         if (!test(END)) {
