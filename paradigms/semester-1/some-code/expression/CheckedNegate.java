@@ -2,15 +2,11 @@ package expression;
 
 public class CheckedNegate implements Operand {
     private static final Priority priority = Priority.VAR;
-    private final Variable variable;
+    private final Operand expression;
     private static final char operationSign = '-';
 
-    public CheckedNegate(String variable) {
-        this.variable = new Variable(variable);
-    }
-
-    public CheckedNegate(Variable variable) {
-        this.variable = variable;
+    public CheckedNegate(Operand expression) {
+        this.expression = expression;
     }
 
     private void overflowCheck(int x) {
@@ -20,34 +16,32 @@ public class CheckedNegate implements Operand {
     }
 
     @Override
-    public int evaluate(int x) throws ArithmeticException {
-        if (this.variable.evaluate(10) == 10) {
-            overflowCheck(x);
-            return -x;
-        }
-        return 0;
+    public int evaluate(int x, int y, int z) throws ArithmeticException {
+        int result = ((TripleExpression)this.expression).evaluate(x, y, z);
+        overflowCheck(result);
+        System.out.println("negate result" + -result);
+        return result * -1;
     }
 
     @Override
-    public int evaluate(int x, int y, int z) {
-        switch (this.variable.evaluate(1, 2, 3)) {
-            case (1):
-                overflowCheck(x);
-                return -x;
-            case (2):
-                overflowCheck(y);
-                return -y;
-            case(3):
-                overflowCheck(z);
-                return -z;
-                default:
-                    return 0;
+    public int evaluate(int x) throws ArithmeticException {
+        int result = ((Expression)this.expression).evaluate(x);
+        try {
+            overflowCheck(result);
+        } catch (ArithmeticException e) {
+            throw e;
         }
+        return result * -1;
     }
 
     @Override
     public String toMiniString() {
-        return "-" + this.variable;
+        return "-" + this.expression.toMiniString();
+    }
+
+    @Override
+    public String toString() {
+        return "(-" + this.expression.toString() + ")";
     }
 
     @Override

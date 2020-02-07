@@ -19,8 +19,32 @@ public class CheckedMultiply extends Operation {
     }
 
     private void overflowCheck(int left, int right) {
-        int delta = (right * left) / right;
-        if (delta != left) {
+        if (right == 0 || left == 0) {
+            return;
+        }
+        if (right > 0 && left > 0) {
+            int delta = Integer.MAX_VALUE / left;
+            if (right > delta) {
+                throw new ArithmeticException("overflow");
+            }
+            return;
+        }
+        if (right < 0 && left < 0) {
+            int delta = Integer.MAX_VALUE / left;
+            if (right < delta) {
+                throw new ArithmeticException("overflow");
+            }
+            return;
+        }
+        if (right > 0 && left < 0) {
+            int delta = Integer.MIN_VALUE / right;
+            if (left < delta) {
+                throw new ArithmeticException("overflow");
+            }
+            return;
+        }
+        int delta = Integer.MIN_VALUE / left;
+        if (right < delta) {
             throw new ArithmeticException("overflow");
         }
     }

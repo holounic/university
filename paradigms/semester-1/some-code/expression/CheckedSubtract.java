@@ -20,7 +20,13 @@ public class CheckedSubtract extends Operation {
 
     private void overflowCheck(int left, int right) {
         int delta;
-        if (left > 0 && right < 0) {
+        if (left == 0) {
+            if (right == Integer.MIN_VALUE) {
+                throw new ArithmeticException("overflow");
+            }
+            return;
+        }
+        if (left > 0 && right <= 0) {
             if (left - Integer.MAX_VALUE > right) {
                 throw new ArithmeticException("overflow");
             }

@@ -25,9 +25,9 @@ public class CheckedAdd extends Operation {
             }
             return;
         }
-
         if (left < 0 && right < 0) {
-            if (Integer.MIN_VALUE - left > right) {
+            System.out.println(Integer.MIN_VALUE - left + "      right : " + right);
+            if (Integer.MIN_VALUE - left > right || Integer.MIN_VALUE - right > left) {
                 throw new ArithmeticException("overflow");
             }
         }
@@ -35,26 +35,18 @@ public class CheckedAdd extends Operation {
 
     @Override
     public int evaluate(int x) throws ArithmeticException {
-        try {
-            int left = this.left.evaluate(x);
-            int right = this.right.evaluate(x);
-            checkOverflow(left, right);
-            return left + right;
-        } catch (ArithmeticException e) {
-            throw e;
-        }
+        int left = this.left.evaluate(x);
+        int right = this.right.evaluate(x);
+        checkOverflow(left, right);
+        return left + right;
     }
 
     @Override
     public int evaluate(int x, int y, int z) throws ArithmeticException {
-        try {
-            int left = this.left.evaluate(x, y, z);
-            int right = this.right.evaluate(x, y, z);
-            checkOverflow(left, right);
-            return left + right;
-        } catch (ArithmeticException e) {
-            throw e;
-        }
-
+        int left = this.left.evaluate(x, y, z);
+        int right = this.right.evaluate(x, y, z);
+        System.out.println("sun " + left + " " + right + " = " + (left + right));
+        checkOverflow(left, right);
+        return left + right;
     }
 }
