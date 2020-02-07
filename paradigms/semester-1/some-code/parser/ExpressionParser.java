@@ -115,14 +115,13 @@ public class ExpressionParser implements Parser {
                 throw new ParsingException("Wrong number format", pointer);
             }
         }
-        if (getChar() == '-' && Character.isAlphabetic(getChar(pointer + 1))) {
+        if (getChar() == '-') {
             nextChar();
-            String variable = identifier();
-            if (variables.contains(variable)) {
-                return new CheckedNegate(variable);
+            TripleExpression inner = number();
+            if (inner instanceof Const) {
+                return new Const(-1 * ((Const) inner).evaluate(0));
             }
-            pointer -= variable.length();
-            throw new ParsingException("Wrong number format", pointer);
+            return new CheckedNegate((Operand)inner);
         }
         if (test('(')) {
             int begin = pointer;
@@ -130,7 +129,6 @@ public class ExpressionParser implements Parser {
             TripleExpression inner = addSub();
             skipWhiteSpace();
             if (testNext(')')) {
-                nextChar();
                 return inner;
             }
             pointer = begin;
@@ -182,17 +180,16 @@ public class ExpressionParser implements Parser {
 
     @Override
     public TripleExpression parse(String source) throws ParsingException {
-        this.expression = source + END;
-        TripleExpression result = parse();
         pointer = 0;
-        return result;
+        this.expression = source + END;
+        return parse();
     }
 
     public TripleExpression parse() throws ParsingException {
-        TripleExpression result = addSub();
-        if (!test(END)) {
-            throw new ParsingException("Expected end, found " + getChar(), pointer);
-        }
-        return result;
+            TripleExpression result = addSub();
+            if (!test(END)) {
+                throw new ParsingException("Expected end, found " + getChar(), pointer);
+            }
+            return result;
     }
 }
