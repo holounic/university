@@ -9,7 +9,7 @@ public abstract class Operation implements Operand {
         this.right = right;
     }
 
-    protected abstract char getOperationSign();
+    protected abstract String getOperationSign();
 
     @Override
     public String toString() {
@@ -45,7 +45,6 @@ public abstract class Operation implements Operand {
         }
         return expression.toString();
     }
-
 
 
 

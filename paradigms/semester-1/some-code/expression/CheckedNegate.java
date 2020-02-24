@@ -1,30 +1,25 @@
 package expression;
+import expression.parser.OverflowException;
 
-public class CheckedNegate implements Operand {
+public class CheckedNegate extends AbstractUnary {
     private static final Priority priority = Priority.VAR;
     private final Operand expression;
-    private static final char operationSign = '-';
+    private static final String operationSign = "-";
 
     public CheckedNegate(Operand expression) {
+        super(expression);
         this.expression = expression;
     }
 
     private void overflowCheck(int x) {
         if (x == Integer.MIN_VALUE) {
-            throw new ArithmeticException("overflow");
+            throw new OverflowException();
         }
     }
 
     @Override
-    public int evaluate(int x, int y, int z) throws ArithmeticException {
-        int result = ((TripleExpression)this.expression).evaluate(x, y, z);
-        overflowCheck(result);
-        System.out.println("negate result" + -result);
-        return result * -1;
-    }
+    protected int operator(int x) {
 
-    @Override
-    public int evaluate(int x) throws ArithmeticException {
         int result = ((Expression)this.expression).evaluate(x);
         try {
             overflowCheck(result);
@@ -47,5 +42,10 @@ public class CheckedNegate implements Operand {
     @Override
     public Priority getPriority() {
         return priority;
+    }
+
+    @Override
+    public int evaluate(int x) {
+        return 0;
     }
 }

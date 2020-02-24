@@ -1,15 +1,16 @@
 package expression;
+import expression.parser.OverflowException;
 
-public class CheckedMultiply extends Operation {
-    private static final Priority priority = Priority.HIGH_M;
-    private static final char operationSign = '*';
+public class CheckedMultiply extends AbstractBinary {
+    private static final Priority priority = Priority.MEDIUM_M;
+    private static final String operationSign = "*";
 
     public CheckedMultiply(Operand left, Operand right) {
         super(left, right);
     }
 
     @Override
-    protected char getOperationSign() {
+    protected String getOperationSign() {
         return operationSign;
     }
 
@@ -19,58 +20,24 @@ public class CheckedMultiply extends Operation {
     }
 
     private void overflowCheck(int left, int right) {
-        if (right == 0 || left == 0) {
-            return;
+        if (left > 0 && right > 0 && Integer.MAX_VALUE / left < right) {
+            throw new OverflowException();
         }
-        if (right > 0 && left > 0) {
-            int delta = Integer.MAX_VALUE / left;
-            if (right > delta) {
-                throw new ArithmeticException("overflow");
-            }
-            return;
+        if (left > 0 && right < 0 && Integer.MIN_VALUE / left > right) {
+            throw new OverflowException();
         }
-        if (right < 0 && left < 0) {
-            int delta = Integer.MAX_VALUE / left;
-            if (right < delta) {
-                throw new ArithmeticException("overflow");
-            }
-            return;
+        if (left < 0 && right < 0 && Integer.MAX_VALUE / left > right) {
+            throw new OverflowException();
         }
-        if (right > 0 && left < 0) {
-            int delta = Integer.MIN_VALUE / right;
-            if (left < delta) {
-                throw new ArithmeticException("overflow");
-            }
-            return;
-        }
-        int delta = Integer.MIN_VALUE / left;
-        if (right < delta) {
-            throw new ArithmeticException("overflow");
+        if (left < 0 && right > 0 && Integer.MIN_VALUE / right > left) {
+            throw new OverflowException();
         }
     }
 
     @Override
-    public int evaluate(int x) throws ArithmeticException {
-        try {
-            int left = this.left.evaluate(x);
-            int right = this.right.evaluate(x);
-            overflowCheck(left, right);
-            return left * right;
-        } catch (ArithmeticException e) {
-            throw e;
-        }
+    protected int operator(int x, int y) {
+        overflowCheck(x, y);
+        return x * y;
     }
 
-    @Override
-    public int evaluate(int x, int y, int z) throws ArithmeticException {
-        try {
-            int left = this.left.evaluate(x, y, z);
-            int right = this.right.evaluate(x, y, z);
-            overflowCheck(left, right);
-            return left * right;
-        } catch (ArithmeticException e) {
-            throw e;
-        }
-
-    }
 }

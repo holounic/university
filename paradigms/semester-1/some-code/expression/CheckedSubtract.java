@@ -1,15 +1,17 @@
 package expression;
 
-public class CheckedSubtract extends Operation {
+import expression.parser.OverflowException;
+
+public class CheckedSubtract extends AbstractBinary {
     private static final Priority priority = Priority.LOW_S;
-    private static final char operationSign = '-';
+    private static final String operationSign = "-";
 
     public CheckedSubtract(Operand first, Operand second) {
         super(first, second);
     }
 
     @Override
-    protected char getOperationSign() {
+    protected String getOperationSign() {
         return operationSign;
     }
 
@@ -19,50 +21,24 @@ public class CheckedSubtract extends Operation {
     }
 
     private void overflowCheck(int left, int right) {
-        int delta;
         if (left == 0) {
             if (right == Integer.MIN_VALUE) {
-                throw new ArithmeticException("overflow");
+                throw new OverflowException();
             }
             return;
         }
-        if (left > 0 && right <= 0) {
-            if (left - Integer.MAX_VALUE > right) {
-                throw new ArithmeticException("overflow");
-            }
-            return;
+        if (left > 0 && right < 0 && Integer.MAX_VALUE + right < left) {
+            throw new OverflowException();
         }
-        if (left < 0 && right > 0) {
-            if (left - Integer.MIN_VALUE < right) {
-                throw new ArithmeticException("overflow");
-            }
+        if (left < 0 && right > 0 && left - Integer.MIN_VALUE < right) {
+            throw new OverflowException();
         }
     }
 
-    @Override
-    public int evaluate(int x) throws ArithmeticException {
-        try {
-            int left = this.left.evaluate(x);
-            int right = this.right.evaluate(x);
-            int result = left - right;
-            overflowCheck(left, right);
-            return result;
-        } catch (ArithmeticException e) {
-            throw e;
-        }
-    }
 
     @Override
-    public int evaluate(int x, int y, int z) throws ArithmeticException {
-        try {
-            int left = this.left.evaluate(x, y, z);
-            int right = this.right.evaluate(x, y, z);
-            int result = left - right;
-            overflowCheck(left, right);
-            return result;
-        } catch (ArithmeticException e) {
-            throw e;
-        }
-
+    protected int operator(int x, int y) {
+        overflowCheck(x, y);
+        return x - y;
     }
 }
