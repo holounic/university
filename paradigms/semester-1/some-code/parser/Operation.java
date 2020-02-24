@@ -6,5 +6,6 @@ public enum Operation {
     MUL,
     DIV,
     NONE,
-    CLOSING
+    POW,
+    LOG
 }

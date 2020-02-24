@@ -20,7 +20,9 @@ public class ExpressionParser implements Parser {
             "-" , Operation.SUB,
             "+", Operation.ADD,
             "*", Operation.MUL,
-            "/", Operation.DIV
+            "/", Operation.DIV,
+            "//", Operation.LOG,
+            "**", Operation.POW
     );
 
     private final char END = '\0';
@@ -83,7 +85,7 @@ public class ExpressionParser implements Parser {
             return Operation.NONE;
         }
         if (!test(END)) {
-            throw new ParsingException("Expected operation, found something", pointer);
+            throw new OperationParsingException(pointer);
         }
         return Operation.NONE;
     }
@@ -91,13 +93,17 @@ public class ExpressionParser implements Parser {
     private String identifier() {
         StringBuilder identifier = new StringBuilder();
         if (!test(END)) {
+            char c = getChar();
             identifier.append(getChar());
             if (Character.isLetter(getChar())) {
                 while (Character.isLetter(nextChar())) {
                     identifier.append(getChar());
                 }
             } else {
-                nextChar();
+                if (c == nextChar() && (c == '*' || c == '/')) {
+                    identifier.append(getChar());
+                    nextChar();
+                }
             }
         }
         return identifier.toString();
@@ -112,7 +118,7 @@ public class ExpressionParser implements Parser {
                 return new Const(Integer.parseInt(number));
             } catch (NumberFormatException e) {
                 pointer -= number.length();
-                throw new ParsingException("Wrong number format", pointer);
+                throw new NumberParsingException(pointer);
             }
         }
         if (getChar() == '-') {
@@ -132,7 +138,7 @@ public class ExpressionParser implements Parser {
                 return inner;
             }
             pointer = begin;
-            throw new ParsingException("Mismatched parenthesis ", pointer);
+            throw new ParenthesisParsingException(pointer);
         }
         if (!test(END)) {
             String identifier = identifier();
@@ -142,25 +148,40 @@ public class ExpressionParser implements Parser {
             pointer -= identifier.length();
             throw new ParsingException("Expected value, found " + identifier, pointer);
         }
-        throw new ParsingException("Expected value, found something else", pointer);
+        throw new ParsingException("Expected value, found end of the expression", pointer);
     }
 
     private TripleExpression mulDiv() throws ParsingException {
-        TripleExpression left = number();
+        TripleExpression left = powLog();
         while (true) {
-            currentOperation = operation();
             switch (currentOperation) {
                 case MUL:
-                    left =  new CheckedMultiply((Operand) left, (Operand) number());
+                    left =  new CheckedMultiply((Operand) left, (Operand) powLog());
                     break;
                 case DIV:
-                    left =  new CheckedDivide((Operand) left, (Operand) number());
+                    left =  new CheckedDivide((Operand) left, (Operand) powLog());
                     break;
                 default:
                     return left;
             }
         }
+    }
 
+    private TripleExpression powLog() throws ParsingException {
+        TripleExpression left = number();
+        while (true) {
+            currentOperation = operation();
+            switch (currentOperation) {
+                case LOG:
+                    left = new CheckedLog((Operand)left, (Operand)number());
+                    break;
+                case POW:
+                    left = new CheckedPow((Operand)left, (Operand)number());
+                    break;
+                    default:
+                        return left;
+            }
+        }
     }
     private TripleExpression addSub() throws ParsingException {
         TripleExpression left = mulDiv();
