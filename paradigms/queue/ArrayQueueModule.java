@@ -11,16 +11,6 @@ public class ArrayQueueModule {
         return (begin + size) % array.length;
     }
 
-    public static void enqueue(Object x) {
-        assert x != null;
-        if (size == array.length) {
-            resize();
-        }
-        array[end()] = x;
-        size++;
-    }
-
-    //Prev: true
     private static void resize() {
         Object[] temp = new Object[size];
         System.arraycopy(array, begin, temp, 0, array.length - begin);
@@ -30,10 +20,20 @@ public class ArrayQueueModule {
         array = Arrays.copyOf(temp, 2 * size);
         begin = 0;
     }
-    /* Post: array.length = array'.length * 2 && begin = 0 && end = size
-     && forall i = 0... size: array[i] = array'[(i + begin) % array'.length]
-    */
 
+    //Pre: x != null
+    //Post: |Q| = |Q'| + 1 && Q = {elements of Q', x}
+    public static void enqueue(Object x) {
+        assert x != null;
+        if (size == array.length) {
+            resize();
+        }
+        array[end()] = x;
+        size++;
+    }
+
+    //Pre: true
+    //Post: R = e_1 && |Q| = |Q'| - 1 && Q = {e'_2, ...e'n}
     public static Object dequeue() {
         if (size == 0) {
             return null;
@@ -48,25 +48,35 @@ public class ArrayQueueModule {
         return x;
     }
 
+    //Pre: |Q| > 0
+    // Post: R = e_1
     public static Object element() {
         assert size > 0;
         return array[begin];
     }
 
+    //Pre: true
+    //Post: R = |Q|
     public static int size() {
         return size;
     }
 
+    //Pre: true
+    //Post: R = (|Q| == 0 ? true : false)
     public static boolean isEmpty() {
         return size == 0;
     }
 
+    //Pre: true
+    //Post: |Q| = 0
     public static void clear() {
         array = new Object[10];
         begin = 0;
         size = 0;
     }
 
+    //Pre: x != null
+    //Post: |Q| = |Q'| + 1 && Q = {elements of Q', x}
     public static void push(Object x) {
         assert x != null;
         if (size == array.length) {
@@ -77,11 +87,15 @@ public class ArrayQueueModule {
         size++;
     }
 
+    //Pre |Q| > 0
+    //Post: R = last added elemnts of Q
     public static Object peek() {
         assert size > 0;
         return array[(end() - 1 < 0 ? array.length - 1 : end() - 1)];
     }
 
+    //Pre: |Q| > 0
+    //Post: R = last added elemnt of Q && |Q| = |Q'| - 1 && Q = {e_1 ... e_(n-1)}
     public static Object remove() {
         assert size > 0;
         int index = end() - 1 < 0 ? array.length - 1 : end() - 1;
