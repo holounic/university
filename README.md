@@ -14,18 +14,18 @@
 ## [Введение в программирование и парадигмы](https://github.com/holounic/university/tree/master/paradigms/semester-1)
 
 Домашки:
-* [Sum](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/Sum.java)
-* [SumDouble](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/SumDouble.java)
-* [ReverseSum](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/ReverseSum.java)
+* [Sum](https://github.com/holounic/university/blob/master/paradigms/Sum.java)
+* [SumDouble](https://github.com/holounic/university/blob/master/paradigms/SumDouble.java)
+* [ReverseSum](https://github.com/holounic/university/blob/master/paradigms/ReverseSum.java)
 * [WordStatInput](https://github.com/holounic/university/blob/master/paradigms/semester-1/some-code/WordStatInput.java)
-* [ReverseMin](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/ReverseMin)
-* [WordStatIndex](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/WordStatIndex)
-* [Markup](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/markup)
-* [North-Western Russia regional contest](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/north-western-russia-regional-contest)
-* [Md2html](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/md2html) my very first parser
-* [MnkGame](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/mnkGame)
-* [Expression](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/expression)
-* [Expression parser](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/parser) my very second parser
+* [ReverseMin](https://github.com/holounic/university/tree/master/paradigms/ReverseMin)
+* [WordStatIndex](https://github.com/holounic/university/blob/master/paradigms/WordStatInput.java)
+* [Markup](https://github.com/holounic/university/tree/master/paradigms/markup)
+* [North-Western Russia regional contest](https://github.com/holounic/university/tree/master/paradigms/north-western-russia-regional-contest)
+* [Md2html](https://github.com/holounic/university/tree/master/paradigms/md2html) my very first parser
+* [MnkGame](https://github.com/holounic/university/tree/master/paradigms/mnkGame)
+* [Expression](https://github.com/holounic/university/tree/master/paradigms/expression)
+* [Expression parser](https://github.com/holounic/university/tree/master/paradigms/parser) my very second parser
 * [Queue with contracts](https://github.com/holounic/university/tree/master/paradigms/queue)
 
 ## [Линал](https://github.com/holounic/university/tree/master/linear-algebra/labs)
