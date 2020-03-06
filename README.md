@@ -26,6 +26,7 @@
 * [MnkGame](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/mnkGame)
 * [Expression](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/expression)
 * [Expression parser](https://github.com/holounic/university/tree/master/paradigms/semester-1/some-code/parser) my very second parser
+* [Queue with contracts](https://github.com/holounic/university/tree/master/paradigms/queue)
 
 ## [Линал](https://github.com/holounic/university/tree/master/linear-algebra/labs)
 * [Matrix operations](https://github.com/holounic/university/blob/master/linear-algebra/labs/matrix-algebra.py)
