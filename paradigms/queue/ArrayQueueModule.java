@@ -1,16 +1,23 @@
 package queue;
 
 import java.util.Arrays;
-
+//define: e_start = the most recently added element from the undeleted ones
+//inv: size >= 0
+// internal elements of queue are not null
 public class ArrayQueueModule {
     private static int begin = 0;
     private static int size = 0;
     private static Object[] array = new Object[3];
 
+    //Pre: true
+    //Post: R = index of last added element && Q = Q'(queue does not change)
     private static int end() {
         return (begin + size) % array.length;
     }
 
+
+    //Pre: true
+    //Post: Q = Q'(queue does not change)
     private static void resize() {
         Object[] temp = new Object[size];
         System.arraycopy(array, begin, temp, 0, array.length - begin);
@@ -49,20 +56,20 @@ public class ArrayQueueModule {
     }
 
     //Pre: |Q| > 0
-    // Post: R = e_1
+    // Post: R = e_1 && Q = Q'(queue does not change)
     public static Object element() {
         assert size > 0;
         return array[begin];
     }
 
     //Pre: true
-    //Post: R = |Q|
+    //Post: R = |Q| && Q = Q'(queue does not change)
     public static int size() {
         return size;
     }
 
     //Pre: true
-    //Post: R = (|Q| == 0 ? true : false)
+    //Post: R = (|Q| == 0 ? true : false) && Q = Q'(queue does not change)
     public static boolean isEmpty() {
         return size == 0;
     }
@@ -88,7 +95,7 @@ public class ArrayQueueModule {
     }
 
     //Pre |Q| > 0
-    //Post: R = last added elemnts of Q
+    //Post: R = last added elemnts of Q && Q = Q'(queue does not change)
     public static Object peek() {
         assert size > 0;
         return array[(end() - 1 < 0 ? array.length - 1 : end() - 1)];
@@ -105,16 +112,4 @@ public class ArrayQueueModule {
         return x;
     }
 
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        if (size == 0) {
-            return "null";
-        }
-        int i = begin;
-        do {
-            builder.append((array[i] == null ? "null" : array[i].toString()) + " ");
-            i = ++i % array.length;
-        } while (i != end());
-        return builder.toString();
-    }
 }

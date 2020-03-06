@@ -1,9 +1,9 @@
 package queue;
 
 import java.util.Arrays;
-
-//inv: size >= 0 && begin >= 0 && end >= 0
-// Queue = {e_1, e_2...e_n} not null
+//define: e_start = the most recently added element from the undeleted ones
+//inv: size >= 0
+// internal elements of queue are not null
 public class ArrayQueue {
     private int begin, size;
     private Object[] array;
@@ -12,11 +12,14 @@ public class ArrayQueue {
         array = new Object[100];
     }
 
-
+    //Pre: true
+    //Post: R = index of last added element && Q = Q'(queue does not change)
     private int end() {
         return (begin + size) % array.length;
     }
 
+    //Pre: true
+    //Post: Q = Q'(queue does not change)
     private void resize() {
         Object[] temp = new Object[size];
 
@@ -44,11 +47,9 @@ public class ArrayQueue {
     }
 
     //Pre: |Q| > 0
-    //Post: R = e_start && |Q| = |Q'| - 1 && Q' = {e_2, e_3 ... e_n}
+    //Post: R = e_1 && |Q| = |Q'| - 1 && Q' = {e_2, e_3 ... e_n}
     public Object dequeue() {
-        if (size == 0) {
-            return null;
-        }
+        assert size > 0;
         Object x = array[begin];
         array[begin] = null;
         begin = ++begin % array.length;
@@ -60,8 +61,8 @@ public class ArrayQueue {
     }
 
 
-    //Pre: size > 0
-    //Post: R = e_start
+    //Pre: |Q| > 0
+    //Post: R = e_start && Q = Q'(queue does not change)
     public Object element() {
         if (size == 0) {
             return null;
@@ -71,19 +72,19 @@ public class ArrayQueue {
 
 
     //Pre: true
-    //Post: R = |Q|
+    //Post: R = |Q| && Q = Q'(queue does not change)
     public int size() {
         return size;
     }
 
 
     //Pre: true
-    //Post: R = (|Q| == 0 ? true : false)
+    //Post: R = (|Q| == 0) && Q = Q'(queue does not change)
     public boolean isEmpty() {
         return size == 0;
     }
 
-    //Pre: true
+    //Pre: x != null
     //Post: |Q| = |Q'| + 1 && Q = {x, (elements of Q')}
     public void push(Object x) {
         assert x != null;
@@ -96,14 +97,14 @@ public class ArrayQueue {
     }
 
     //Pre: |Q| > 0
-    //Post: R = e_end
+    //Post: R = last added element of Q && Q = Q'(queue does not change)
     public Object peek() {
         assert size > 0;
         return array[(end() - 1 < 0 ? array.length - 1 : end() - 1)];
     }
 
     //Pre: |Q| > 0
-    //Post: R = e_end && Q = {e_1 ... e_(end - 1)} && |Q| = |Q'| - 1
+    //Post: R = last added element of Q && Q = {e_1 ... e_(end - 1)} && |Q| = |Q'| - 1
     public Object remove() {
         assert size > 0;
         int index = end() - 1 < 0 ? array.length - 1 : end() - 1;
@@ -121,17 +122,4 @@ public class ArrayQueue {
         size = 0;
     }
 
-
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        if (size == 0) {
-            return "null";
-        }
-        int i = begin;
-        do {
-            builder.append((array[i] == null ? "null" : array[i].toString()) + " ");
-            i = ++i % array.length;
-        } while (i != end());
-        return builder.toString();
-    }
 }

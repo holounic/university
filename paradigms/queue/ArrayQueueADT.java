@@ -1,18 +1,22 @@
 package queue;
 
 import java.util.Arrays;
-
+//define: e_start = the most recently added element from the undeleted ones
 //inv: size >= 0 && begin >= 0 && end >= 0
-// Queue = {e_1, e_2...e_n} not null
+// internal elements of Q are not null
 public class ArrayQueueADT {
     private int begin = 0;
     private int size = 0;
     private Object[] array = new Object[3];
 
+    //Pre: true
+    //Post: R = index of last added element && Q = Q'(queue does not change)
     private static int end(ArrayQueueADT queue) {
         return (queue.begin + queue.size) % queue.array.length;
     }
 
+    //Pre: true
+    //Post: Q = Q'(queue does not change)
     private static void resize(ArrayQueueADT queue) {
         assert queue != null;
         Object[] temp = new Object[queue.size];
@@ -52,7 +56,7 @@ public class ArrayQueueADT {
     }
 
     //Pre: queue != null && |Q| > 0
-    // Post: R = e_1
+    // Post: R = e_begin && Q = Q'(queue does not change)
     public static Object element(ArrayQueueADT queue) {
         if (queue.size == 0) {
             return null;
@@ -62,7 +66,7 @@ public class ArrayQueueADT {
 
 
     //Pre: queue != null
-    //Post: R = |Q|
+    //Post: R = |Q| && Q = Q' (queue does not change)
     public static int size(ArrayQueueADT queue) {
         assert queue != null;
         return queue.size;
@@ -70,7 +74,7 @@ public class ArrayQueueADT {
 
 
     //Pre: queue != null
-    //Post: R = (|Q| == 0 ? true : false)
+    //Post: R = (|Q| == 0 ? true : false) && Q = Q' (queue does not change)
     public static boolean isEmpty(ArrayQueueADT queue) {
         assert queue != null;
         return queue.size == 0;
@@ -91,7 +95,7 @@ public class ArrayQueueADT {
 
 
     //Pre queue != null && |Q| > 0
-    //Post: R = last added elemnts of Q
+    //Post: R = last added elemnts of Q && Q = Q' (queue does not change)
     public static Object peek(ArrayQueueADT queue) {
         assert queue != null;
         assert queue.size > 0;
@@ -118,19 +122,6 @@ public class ArrayQueueADT {
         queue.array = new Object[3];
         queue.begin = 0;
         queue.size = 0;
-    }
-
-    public static String toString(ArrayQueueADT queue) {
-        StringBuilder builder = new StringBuilder();
-        if (queue.size == 0) {
-            return "null";
-        }
-        int i = queue.begin;
-        do {
-            builder.append((queue.array[i] == null ? "null" : queue.array[i].toString()) + " ");
-            i = ++i % queue.array.length;
-        } while (i != end(queue));
-        return builder.toString();
     }
 
 }
