@@ -42,7 +42,7 @@ _Sift Up_ Если i-й элемент больше своего отца, то 
 
 ```
 void siftUp(int i) {
-    while (a[i] < a[(i - 1) / 2]) {
+    while (i != 0 && a[i] < a[(i - 1) / 2]) {
         swap(a[i], a[(i - 1) / 2];
         i = (i - 1) / 2;
     }
@@ -81,6 +81,7 @@ _insert_ Добавление нового элемента в кучу за O(l
 void insert(int value) {
     a[n] = value;
     SiftUp(n);
+    n++;
 }
 ```
 
