@@ -27,6 +27,8 @@
 * [Expression](https://github.com/holounic/university/tree/master/paradigms/expression)
 * [Expression parser](https://github.com/holounic/university/tree/master/paradigms/parser) my very second parser
 * [Queue with contracts](https://github.com/holounic/university/tree/master/paradigms/queue)
+* [Functional expression (js)](https://github.com/holounic/university/blob/master/paradigms/javascript/functionalExpression.js)
+* [Object expression (js)](https://github.com/holounic/university/blob/master/paradigms/javascript/objectExpression.js)
 
 ## [Линал](https://github.com/holounic/university/tree/master/linear-algebra/labs)
 * [Matrix operations](https://github.com/holounic/university/blob/master/linear-algebra/labs/matrix-algebra.py)
