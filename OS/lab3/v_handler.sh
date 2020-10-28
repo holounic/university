@@ -1,5 +1,4 @@
 #!/bin/bash
-touch v.txt
 
 num=1
 mode="+"
