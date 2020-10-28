@@ -8,5 +8,5 @@ chmod +x $script
     "./$script" &
     "./$script" & 
 } ;
-proc_pid=`pgrep iv_proc.sh -o` ;
+proc_pid=`pgrep $script -o` ;
 sudo cpulimit --pid $proc_pid --limit 5 --background
