@@ -11,7 +11,7 @@ do
         exit 0
     fi
 
-    if [[ ! "$line" =~ [0-9]+ && $line != "+" && $line != "*" ]];
+    if [[ ! "$line" =~ [0-9]+ && $line != "+" && $line != "*" && $line != "-"]];
     then 
 	    echo "Incorrect input"
 	    exit 1

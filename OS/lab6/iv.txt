@@ -1,0 +1,7 @@
+1
+#  NH - no header (логично)
+driverquery /NH > DRIVERS.txt
+
+2
+# R - reversed (логично)
+sort /R DRIVERS.txt > sorted.txt

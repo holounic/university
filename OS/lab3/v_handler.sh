@@ -15,6 +15,10 @@ while true; do
       mode="*"
       echo "Switching to multiplying mode"
       ;;
+    "-")
+      mode="-"
+      echo "Switching to subtraction"
+      ;;
     [0-9]*)
       case $mode in
       	"+")
@@ -22,6 +26,9 @@ while true; do
           ;;
         "*")
           num=$(($num * $line))
+          ;;
+        "-")
+          num=$(($num - $line))
           ;;
       esac
       echo $num
