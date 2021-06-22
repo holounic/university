@@ -1,0 +1,172 @@
+start: s
+accept: ac
+reject: rj
+blank: _
+
+s 0 -> ac 1 ^
+s 1 -> prep0 1 >
+
+prep0 1 -> prep0 1 >
+prep0 0 -> prep0 0 >
+prep0 _ -> prep | <
+prep 1 -> prep 1 <
+prep 0 -> prep 0 <
+prep _ -> prep' * <
+prep' _ -> prep2 1 <
+prep2 _ -> prep3 = <
+prep3 _ -> prep4 0 >
+prep4 = -> expr = >
+
+expr 0 -> expr 0 >
+expr 1 -> expr 1 >
+expr * -> check_not_0 * >
+
+check_not_0 0 -> check_not_0 0 >
+check_not_0 | -> remove_until* _ <
+check_not_0 1 -> found1 1 <
+found1 1 -> found1 1 <
+found1 0 -> found1 0 <
+found1 * -> copy_right * >
+
+copy_right 1 -> copy1 i >
+copy_right 0 -> copy0 o >
+copy_right i -> copy_right 1 >
+copy_right o -> copy_right 0 >
+copy_right | -> copy_end | <
+
+copy1 0 -> copy1 0 >
+copy1 1 -> copy1 1 >
+copy1 | -> copy1 | >
+copy1 _ -> copied 1 <
+copy0 0 -> copy0 0 >
+copy0 1 -> copy0 1 >
+copy0 | -> copy0 | >
+copy0 _ -> copied 0 <
+
+copied 0 -> copied 0 <
+copied 1 -> copied 1 <
+copied | -> copied | <
+copied i -> copy_right i ^
+copied o -> copy_right o ^
+
+copy_end 0 -> copy_end 0 <
+copy_end 1 -> copy_end 1 <
+copy_end * -> expr' * >
+
+expr' 0 -> expr' 0 >
+expr' 1 -> expr' 1 >
+expr' | -> expr'' | <
+
+expr'' 1 -> to_add 0 <
+expr'' 0 -> expr'' 1 <
+expr'' * -> clear_for_old * <
+clear_for_old 1 -> clear_for_old 1 <
+clear_for_old 0 -> clear_for_old 0 <
+clear_for_old = -> copy_old = >
+
+copy_old % -> copy_old % >
+copy_old 1 -> copy_old % >
+copy_old 0 -> copy_old % >
+copy_old * -> copy_old % >
+copy_old | -> copy_old' | >
+
+copy_old' % -> copy_old' % >
+copy_old' _ -> clear_old _ <
+copy_old' 1 -> copy1' % <
+copy_old' 0 -> copy0' % <
+
+clear_old % -> clear_old _ <
+clear_old | -> clear_old _ <
+clear_old 1 -> clear_old' 1 >
+clear_old 0 -> clear_old' 0 >
+clear_old' _ -> clear_old' | <
+clear_old' 1 -> decrease_first 1 ^
+clear_old' 0 -> decrease_first 0 ^
+
+copy1' % -> copy1' % <
+copy1' | -> copy1' | <
+copy1' = -> copy1'' = >
+copy1' 1 -> copy1'' 1 >
+copy1' 0 -> copy1'' 0 >
+copy1'' % -> copy_old 1 >
+
+copy0' % -> copy0' % <
+copy0' | -> copy0' | <
+copy0' = -> copy0'' = >
+copy0' 1 -> copy0'' 1 >
+copy0' 0 -> copy0'' 0 >
+copy0'' % -> copy_old 0 >
+
+to_add 0 -> to_add 0 <
+to_add 1 -> to_add 1 <
+to_add * -> add * <
+
+add 0 -> adding0 o <
+add 1 -> adding1 ! <
+add = -> clear_continue = <
+
+adding0 0 -> adding0 0 <
+adding0 1 -> adding0 1 <
+adding0 = -> add_here0  = <
+
+adding1 1 -> adding1 1 <
+adding1 0 -> adding1 0 <
+adding1 = -> add_here1 = <
+
+add_here0 0 -> added o >
+add_here0 1 -> added ! >
+add_here0 o -> add_here0 o <
+add_here0 ! -> add_here0 ! <
+add_here0 _ -> added o >
+add_here1 0 -> added ! >
+add_here1 1 -> add_here1' o <
+add_here1 o -> add_here1 o <
+add_here1 ! -> add_here1 ! <
+add_here1 _ -> added ! >
+
+add_here1' 1 -> add_here1' 0 <
+add_here1' 0 -> added 1 >
+add_here1' _ -> added 1 >
+
+added 0 -> added 0 >
+added 1 -> added 1 >
+added o -> added o >
+added ! -> added ! >
+added = -> added' = >
+
+added' 0 -> added' 0 >
+added' 1 -> added' 1 >
+added' ! -> add ! <
+added' o -> add o <
+
+clear_continue o -> clear_continue 0 <
+clear_continue 0 -> clear_continue 0 <
+clear_continue 1 -> clear_continue 1 <
+clear_continue ! -> clear_continue ! <
+clear_continue _ -> clear_continue' _ >
+clear_continue' 0 -> clear_continue' 0 >
+clear_continue' 1 -> clear_continue' 1 >
+clear_continue' = -> clear_continue' = >
+
+clear_continue' o -> clear_continue' 0 >
+clear_continue' ! -> clear_continue' 1 >
+clear_continue' * -> expr' * >
+
+decrease_first 0 -> decrease_first 1 <
+decrease_first 1 -> prep_mul 0 <
+prep_mul 1 -> prep_mul 1 <
+prep_mul 0 -> prep_mul 0 <
+prep_mul = -> prep_mul * <
+prep_mul _ -> prep_mul2 = <
+prep_mul2 _ -> prep_mul3 0 >
+prep_mul3 = -> expr = >
+
+remove_until* 1 -> remove_until* _ <
+remove_until* 0 -> remove_until* _ <
+remove_until* * -> gts _ <
+
+gts 0 -> gts 0 <
+gts 1 -> gts 1 <
+gts = -> remove_until= = <
+remove_until= 0 -> remove_until= _ >
+remove_until= = -> ac _ >

@@ -1,0 +1,93 @@
+start: s
+accept: ac
+reject: rj
+blank: _
+
+s 0 -> prep 0 <
+s 1 -> prep 1 <
+
+prep _ -> prep' = <
+prep' _ -> move_to_expr 0 >
+
+move_to_expr 0 -> move_to_expr 0 >
+move_to_expr 1 -> move_to_expr 1 >
+move_to_expr = -> expr = >
+
+expr 0 -> expr 0 >
+expr 1 -> expr 1 >
+expr * -> expr' * >
+
+expr' 0 -> expr' 0 >
+expr' 1 -> expr' 1 >
+expr' _ -> expr'' _ <
+
+expr'' 1 -> to_add 0 <
+expr'' 0 -> expr'' 1 <
+expr'' * -> end * >
+
+to_add 0 -> to_add 0 <
+to_add 1 -> to_add 1 <
+to_add * -> add * <
+
+add 0 -> adding0 o <
+add 1 -> adding1 ! <
+add = -> clear_continue = <
+
+adding0 0 -> adding0 0 <
+adding0 1 -> adding0 1 <
+adding0 = -> add_here0  = <
+
+adding1 1 -> adding1 1 <
+adding1 0 -> adding1 0 <
+adding1 = -> add_here1 = <
+
+add_here0 0 -> added o >
+add_here0 1 -> added ! >
+add_here0 o -> add_here0 o <
+add_here0 ! -> add_here0 ! <
+add_here0 _ -> added o >
+add_here1 0 -> added ! >
+add_here1 1 -> add_here1' o <
+add_here1 o -> add_here1 o <
+add_here1 ! -> add_here1 ! <
+add_here1 _ -> added ! >
+
+add_here1' 1 -> add_here1' 0 <
+add_here1' 0 -> added 1 >
+add_here1' _ -> added 1 >
+
+added 0 -> added 0 >
+added 1 -> added 1 >
+added o -> added o >
+added ! -> added ! >
+added = -> added' = >
+
+added' 0 -> added' 0 >
+added' 1 -> added' 1 >
+added' ! -> add ! <
+added' o -> add o <
+
+end 0 -> end 0 >
+end 1 -> end 1 >
+end _ -> delete _ <
+
+delete 0 -> delete _ <
+delete 1 -> delete _ <
+delete * -> delete _ <
+delete = -> ans_begin _ <
+
+ans_begin 0 -> ans_begin 0 <
+ans_begin 1 -> ans_begin 1 <
+ans_begin _ -> ac _ >
+
+clear_continue o -> clear_continue 0 <
+clear_continue 0 -> clear_continue 0 <
+clear_continue 1 -> clear_continue 1 <
+clear_continue ! -> clear_continue ! <
+clear_continue _ -> clear_continue' _ >
+clear_continue' 0 -> clear_continue' 0 >
+clear_continue' 1 -> clear_continue' 1 >
+clear_continue' = -> clear_continue' = >
+clear_continue' o -> clear_continue' 0 >
+clear_continue' ! -> clear_continue' 1 >
+clear_continue' * -> expr' * >

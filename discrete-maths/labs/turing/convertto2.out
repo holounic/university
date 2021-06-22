@@ -1,0 +1,40 @@
+start: s
+accept: ac
+reject: rj
+blank: _
+
+s 1 -> b 1 <
+s 0 -> b 0 <
+s 2 -> b 2 <
+b _ -> w = <
+w _ -> f 0 >
+f 1 -> f 1 >
+f 0 -> f 0 >
+f = -> f = >
+f 2 -> f 2 >
+f _ -> minus _ <
+
+minus 0 -> minus 2 <
+minus 1 -> to_add 0 <
+minus 2 -> to_add 1 <
+minus = -> delete _ >
+
+to_add 1 -> to_add 1 <
+to_add 2 -> to_add 2 <
+to_add 0 -> to_add 0 <
+to_add = -> plus' = <
+
+plus' 0 -> f 1 >
+plus' 1 -> plus' 0 <
+plus' _ -> f 1 >
+
+delete 0 -> delete _ >
+delete 1 -> delete _ >
+delete 2 -> delete _ >
+delete _ -> back _ <
+back _ -> back _ <
+back 0 -> back' 0 <
+back 1 -> back' 1 <
+back' 0 -> back' 0 <
+back' 1 -> back' 1 <
+back' _ -> ac _ >

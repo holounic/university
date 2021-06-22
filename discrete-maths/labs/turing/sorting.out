@@ -1,0 +1,142 @@
+4
+
+
+S 0 _ _ _ -> w1 0 > 0 > _ ^ _ ^
+S 1 _ _ _ -> w1 1 > 1 > _ ^ _ ^
+
+w1 _ _ _ _ -> check_and_return _ ^ _ ^ _ ^ _ <
+w1 1 _ _ _ -> w1 1 > 1 > _ ^ _ ^
+w1 0 _ _ _ -> w1 0 > 0 > _ ^ _ ^
+w1 _ _ _ _ -> return_head_to_start _ < _ ^ _ ^ _ ^
+w1 | _ _ _ -> w2 | > _ ^ _ ^ _ ^
+w2 1 _ _ _ -> w2 1 > _ ^ 1 > _ ^
+w2 0 _ _ _ -> w2 0 > _ ^ 0 > _ ^
+
+return_head_to_start 0 _ _ _ -> return_head_to_start 0 < _ ^ _ ^ _ ^
+return_head_to_start 1 _ _ _ -> return_head_to_start 1 < _ ^ _ ^ _ ^
+return_head_to_start _ _ _ _ -> AC _ > _ ^ _ ^ _ ^
+
+w2 | _ _ _ -> check_sl | > _ ^ _ ^ _ ^
+w2 _ _ _ _ -> checkk _ < _ ^ _ ^ _ ^
+checkk | _ _ _ -> clear_and_begin_iter | ^ _ ^ _ ^ _ ^
+checkk 0 _ _ _ -> put_sl_and_cmp 0 > _ ^ _ ^ _ ^
+checkk 1 _ _ _ -> put_sl_and_cmp 1 > _ ^ _ ^ _ ^
+
+put_sl_and_cmp _ _ _ _ -> cmp | ^ _ ^ _ ^ _ ^
+
+check_sl | _ _ _ -> clear_and_begin_iter _ < _ ^ _ ^ _ ^
+check_sl 1 _ _ _ -> cmp 1 < _ ^ _ ^ _ ^
+check_sl 0 _ _ _ -> cmp 0 < _ ^ _ ^ _ ^
+
+clear_and_begin_iter | _ _ _ -> move_to_start _ < _ ^ _ ^ _ ^
+move_to_start | _ _ _ -> move_to_start | < _ ^ _ ^ _ ^
+move_to_start 1 _ _ _ -> move_to_start 1 < _ ^ _ ^ _ ^
+move_to_start 0 _ _ _ -> move_to_start 0 < _ ^ _ ^ _ ^
+move_to_start _ _ _ _ -> clear_first_before_start _ ^ _ < _ ^ _ ^
+clear_first_before_start _ 0 _ _ -> clear_first_before_start _ ^ _ < _ ^ _ ^
+clear_first_before_start _ 1 _ _ -> clear_first_before_start _ ^ _ < _ ^ _ ^
+clear_first_before_start _ _ _ _ -> check_iter_condition _ ^ _ ^ _ ^ _ <
+check_iter_condition _ _ _ _ -> AC _ > _ ^ _ ^ _ ^
+check_iter_condition _ _ _ 1 -> clear4 _ ^ _ ^ _ ^ _ <
+clear4 _ _ _ _ -> w1 _ > _ ^ _ ^ _ ^
+clear4 _ _ _ 1 -> clear4 _ ^ _ ^ _ ^ _ <
+
+cmp | _ _ _ -> check_len | ^ _ < _ < _ ^
+
+check_len | 0 0 _ -> check_len | ^ 0 < 0 < _ ^
+check_len | 0 1 _ -> check_len | ^ 0 < 1 < _ ^
+check_len | 1 1 _ -> check_len | ^ 1 < 1 < _ ^
+check_len | 1 0 _ -> check_len | ^ 1 < 0 < _ ^
+check_len | _ 1 _ -> clear_continue | ^ _ ^ 1 ^ _ ^
+check_len | _ 0 _ -> clear_continue | ^ _ ^ 0 ^ _ ^
+check_len | 1 _ _ -> swap | ^ 1 ^ _ ^ 1 >
+check_len | 0 _ _ -> swap | ^ 0 ^ _ ^ 1 >
+check_len | _ _ _ -> compare | ^ _ > _ > _ ^
+
+compare | _ _ _ -> remove_both_and_continue | ^ _ < _ < _ ^
+compare | 1 1 _ -> compare | ^ 1 > 1 > _ ^
+compare | 0 0 _ -> compare | ^ 0 > 0 > _ ^
+compare | 0 1 _ -> clear_right_and_continue | ^ 0 ^ 1 ^ _ ^
+compare | 1 0 _ -> back_and_swap' | ^ 1 < 0 < 1 >
+clear_right_and_continue | 0 0 _ -> clear_right_and_continue | ^ 0 > 0 > _ ^
+clear_right_and_continue | 1 1 _ -> clear_right_and_continue | ^ 1 > 1 > _ ^
+clear_right_and_continue | 1 0 _ -> clear_right_and_continue | ^ 1 > 0 > _ ^
+clear_right_and_continue | 0 1 _ -> clear_right_and_continue | ^ 0 > 1 > _ ^ 
+clear_right_and_continue | _ _ _ -> ready_to_clear | ^ _ < _ < _ ^
+ready_to_clear | 0 0 _ -> ready_to_clear | ^ _ < _ < _ ^
+ready_to_clear | 1 0 _ -> ready_to_clear | ^ _ < _ < _ ^
+ready_to_clear | 1 1 _ -> ready_to_clear | ^ _ < _ < _ ^
+ready_to_clear | 0 1 _ -> ready_to_clear | ^ _ < _ < _ ^
+ready_to_clear | _ _ _ -> move_back_2 | < _ ^ _ ^ _ ^
+move_back_2 0 _ _ _ -> move_back_2 0 < _ ^ _ ^ _ ^
+move_back_2 1 _ _ _ -> move_back_2 1 < _ ^ _ ^ _ ^
+move_back_2 | _ _ _ -> w1 | > _ ^ _ ^ _ ^
+move_back_2 _ _ _ _ -> w1 _ > _ ^ _ ^ _ ^
+
+back_and_swap' | 1 1 _ -> back_and_swap | ^ 1 > 1 > _ ^
+back_and_swap' | 1 0 _ -> back_and_swap | ^ 1 > 0 > _ ^
+back_and_swap' | 0 1 _ -> back_and_swap | ^ 0 > 1 > _ ^
+back_and_swap' | 0 0 _ -> back_and_swap | ^ 0 > 0 > _ ^
+back_and_swap' | _ _ _ -> back_and_swap | ^ _ > _ > _ ^
+back_and_swap | 1 1 _ -> back_and_swap | ^ 1 > 1 > _ ^
+back_and_swap | 1 0 _ -> back_and_swap | ^ 1 > 0 > _ ^
+back_and_swap | 0 1 _ -> back_and_swap | ^ 0 > 1 > _ ^
+back_and_swap | 0 0 _ -> back_and_swap | ^ 0 > 0 > _ ^
+back_and_swap | _ _ _ -> place_first | < _ < _ ^ _ ^
+
+remove_both_and_continue | 0 0 _ -> remove_both_and_continue | ^ _ < _ < _ ^
+remove_both_and_continue | 0 1 _ -> remove_both_and_continue | ^ _ < _ < _ ^
+remove_both_and_continue | 1 0 _ -> remove_both_and_continue | ^ _ < _ < _ ^
+remove_both_and_continue | 1 1 _ -> remove_both_and_continue | ^ _ < _ < _ ^
+remove_both_and_continue | _ _ _ -> back | < _ ^ _ ^ _ ^
+back 1 _ _ _ -> back 1 < _ ^ _ ^ _ ^ 
+back 0 _ _ _ -> back 0 < _ ^ _ ^ _ ^ 
+back | _ _ _ -> w1 | > _ ^ _ ^ _ ^ 
+back _ _ _ _ -> w1 _ > _ ^ _ ^ _ ^ 
+
+swap | 1 _ _ -> end_first_selector | ^ 1 > _ ^ _ ^
+swap | 0 _ _ -> end_first_selector | ^ 0 > _ ^ _ ^
+end_first_selector | 1 _ _ -> end_first_selector | ^ 1 > _ ^ _ ^
+end_first_selector | 0 _ _ -> end_first_selector | ^ 0 > _ ^ _ ^
+end_first_selector | _ _ _ -> end_second_selector | ^ _ ^ _ > _ ^
+end_second_selector | _ 1 _ -> end_second_selector | ^ _ ^ 1 > _ ^
+end_second_selector | _ 0 _ -> end_second_selector | ^ _ ^ 0 > _ ^
+end_second_selector | _ _ _ -> place_first | < _ < _ ^ _ ^
+
+place_first 0 0 _ _ -> place_first 0 < _ < _ ^ _ ^
+place_first 0 1 _ _ -> place_first 1 < _ < _ ^ _ ^
+place_first 1 0 _ _ -> place_first 0 < _ < _ ^ _ ^
+place_first 1 1 _ _ -> place_first 1 < _ < _ ^ _ ^
+place_first | 0 _ _ -> place_first 0 < _ < _ ^ _ ^
+place_first | 1 _ _ -> place_first 1 < _ < _ ^ _ ^
+place_first 0 _ _ _ -> place_second | < _ ^ _ < _ ^
+place_first 1 _ _ _ -> place_second | < _ ^ _ < _ ^
+place_first | _ _ _ -> place_second | < _ ^ _ < _ ^
+
+place_second 0 _ 0 _ -> place_second 0 < _ ^ _ < _ ^
+place_second 0 _ 1 _ -> place_second 1 < _ ^ _ < _ ^
+place_second 1 _ 0 _ -> place_second 0 < _ ^ _ < _ ^
+place_second 1 _ 1 _ -> place_second 1 < _ ^ _ < _ ^
+place_second | _ _ _ -> move_to_next | > _ ^ _ ^ _ ^
+place_second 0 _ _ _ -> place_second 0 ^ _ ^ _ < _ ^
+place_second 1 _ _ _ -> place_second 1 ^ _ ^ _ < _ ^
+place_second _ _ _ _ -> move_to_next _ > _ ^ _ ^ _ ^
+move_to_next 0 _ _ _ -> move_to_next 0 > _ ^ _ ^ _ ^
+move_to_next 1 _ _ _ -> move_to_next 1 > _ ^ _ ^ _ ^
+move_to_next | _ _ _ -> w1 | > _ ^ _ ^ _ ^
+
+clear_continue | _ 0 _ -> clear_second | ^ _ ^ 0 < _ ^
+clear_continue | _ 1 _ -> clear_second | ^ _ ^ 1 < _ ^
+clear_second | _ 1 _ -> clear_second | ^ _ ^ 1 < _ ^
+clear_second | _ 0 _ -> clear_second | ^ _ ^ 0 < _ ^
+clear_second | _ _ _ -> clear_second' | ^ _ ^ _ > _ ^
+clear_second' | _ 0 _ -> clear_second' | ^ _ ^ _ > _ ^
+clear_second' | _ 1 _ -> clear_second' | ^ _ ^ _ > _ ^
+clear_second' | _ _ _ -> clear_first' | ^ _ > _ ^ _ ^
+clear_first' | 1 _ _ -> clear_first' | ^ _ > _ ^ _ ^ 
+clear_first' | 0 _ _ -> clear_first' | ^ _ > _ ^ _ ^ 
+
+clear_first' | _ _ _ -> move_to_prev | < _ ^ _ ^ _ ^
+move_to_prev 0 _ _ _ -> move_to_prev 0 < _ ^ _ ^ _ ^
+move_to_prev 1 _ _ _ -> move_to_prev 1 < _ ^ _ ^ _ ^
+move_to_prev | _ _ _ -> w1 | > _ ^ _ ^ _ ^

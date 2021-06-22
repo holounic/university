@@ -1,0 +1,45 @@
+3
+
+S 1 _ _ -> f _ > 1 > _ ^
+S 0 _ _ -> f _ > 0 > _ ^
+S ( _ _ -> f _ > ( > _ ^
+
+f ( _ _ -> f _ > ( > _ >
+f 0 _ _ -> f _ > 0 > _ ^
+f 1 _ _ -> f _ > 1 > _ ^
+f o _ _ -> f _ > _ ^ _ ^
+f a _ _ -> and _ > _ ^ _ ^
+f ) _ _ -> bracket _ ^ _ < _ ^
+
+and 0 _ _ -> and' 0 ^ _ < _ ^
+and 1 _ _ -> and' 1 ^ _ < _ ^
+and ( _ _ -> f _ > ( > ! >
+and' 0 1 _ -> f _ > 0 > _ ^
+and' 1 1 _ -> f _ > 1 > _ ^
+and' 1 0 _ -> f _ > 0 > _ ^
+and' 0 0 _ -> f _ > 0 > _ ^
+
+bracket _ 0 _ -> bracket _ ^ _ < 0 ^
+bracket _ 0 0 -> bracket _ ^ _ < 0 ^
+bracket _ 0 1 -> bracket _ ^ _ < 1 ^
+bracket _ 1 _ -> bracket _ ^ _ < 1 ^
+bracket _ 1 0 -> bracket _ ^ _ < 1 ^
+bracket _ 1 1 -> bracket _ ^ _ < 1 ^
+
+bracket _ ( 0 -> check_if_and _ ^ 0 > _ <
+bracket _ ( 1 -> check_if_and _ ^ 1 > _ <
+
+check_if_and _ _ _ -> f _ > _ ^ _ ^
+check_if_and _ _ _ -> f _ > _ ^ _ ^
+check_if_and _ _ ! -> 2and _ ^ _ < _ ^
+2and _ 0 _ -> 2and0 _ ^ _ < _ ^
+2and _ 1 _ -> 2and1 _ ^ _ < _ ^
+2and0 _ 0 _ -> f _ > 0 > _ ^
+2and0 _ 1 _ -> f _ > 0 > _ ^
+2and1 _ 0 _ -> f _ > 0 > _ ^
+2and1 _ 1 _ -> f _ > 1 > _ ^
+
+f _ _ _ -> b 0 ^ _ < _ ^
+b 0 0 _ -> b 0 ^ _ < _ ^
+b 0 1 _ -> AC 1 ^ _ < _ ^
+b 0 _ _ -> AC 0 ^ _ < _ ^
