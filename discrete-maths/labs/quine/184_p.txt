@@ -1,0 +1,29 @@
+String escape(String s) {
+	def ss = ''
+	s.each {
+		if (it == '\n') {
+			ss += '\\n'
+		} else if (it == '\t') {
+			ss += '\\t'
+		} else if (it == '\'') {
+			ss += '\\\''
+		} else if (it == '"') {
+			ss += '\\"'
+		} else if (it == '\\') {
+			ss += '\\\\';
+		} else {
+			ss += it
+		}
+	}
+	return ss
+}
+
+String getCodeQ() {
+	def other = 'String escape(String s) {\n\tdef ss = \'\'\n\ts.each {\n\t\tif (it == \'\\n\') {\n\t\t\tss += \'\\\\n\'\n\t\t} else if (it == \'\\t\') {\n\t\t\tss += \'\\\\t\'\n\t\t} else if (it == \'\\\'\') {\n\t\t\tss += \'\\\\\\\'\'\n\t\t} else if (it == \'\"\') {\n\t\t\tss += \'\\\\\"\'\n\t\t} else if (it == \'\\\\\') {\n\t\t\tss += \'\\\\\\\\\';\n\t\t} else {\n\t\t\tss += it\n\t\t}\n\t}\n\treturn ss\n}\n\nString getCodeP() {\n\tdef other = \'$\'\n\tdef my = \'#\'\n\tdef dollar = other.indexOf(\'$\')\n\tdef sharp = other.indexOf(\'#\')\n\treturn other.substring(0, dollar) + escape(my) + other.substring(dollar + 1, sharp) + escape(other) + other.substring(sharp + 1)\n}\n\nprint getCodeP()'
+	def my = 'String escape(String s) {\n\tdef ss = \'\'\n\ts.each {\n\t\tif (it == \'\\n\') {\n\t\t\tss += \'\\\\n\'\n\t\t} else if (it == \'\\t\') {\n\t\t\tss += \'\\\\t\'\n\t\t} else if (it == \'\\\'\') {\n\t\t\tss += \'\\\\\\\'\'\n\t\t} else if (it == \'\"\') {\n\t\t\tss += \'\\\\\"\'\n\t\t} else if (it == \'\\\\\') {\n\t\t\tss += \'\\\\\\\\\';\n\t\t} else {\n\t\t\tss += it\n\t\t}\n\t}\n\treturn ss\n}\n\nString getCodeQ() {\n\tdef other = \'$\'\n\tdef my = \'#\'\n\tdef dollar = other.indexOf(\'$\')\n\tdef sharp = other.indexOf(\'#\')\n\treturn other.substring(0, dollar) + escape(my) + other.substring(dollar + 1, sharp) + escape(other) + other.substring(sharp + 1)\n}\n\nprint getCodeQ()'
+	def dollar = other.indexOf('$')
+	def sharp = other.indexOf('#')
+	return other.substring(0, dollar) + escape(my) + other.substring(dollar + 1, sharp) + escape(other) + other.substring(sharp + 1)
+}
+
+print getCodeQ()

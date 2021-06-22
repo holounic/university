@@ -1,0 +1,1 @@
+q = '"'; src = "q = ''; src = ; print(src[0..6] + q + src[7..13] + q + src + q + src[14..-1])"; print(src[0..4] + q + src[5..13] + q + src + q + src[14..-1])
