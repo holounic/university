@@ -1,0 +1,37 @@
+& 'java.util.*' ;
+
+? [] e ['Integer' val, 'Integer' acc]
+: t[] 'val = t.val; acc = t.val;' ep[acc]'val = ep.val; acc = val;'
+;
+
+? ['Integer' acc] ep ['Integer' val, 'Integer' myAcc]
+: ADD t[] 'myAcc = acc + t.val;' ep[myAcc] 'val = ep.val;'
+| SUB t[]'myAcc = acc - t.val;' ep[myAcc] 'val = ep.val;'
+| EPS 'val = acc;'
+;
+
+? [] t ['Integer' val, 'Integer' myAcc]
+: f[]'myAcc = f.val;' tp[myAcc] 'val = tp.val;'
+;
+
+? ['Integer' acc] tp ['Integer' val, 'Integer' myAcc]
+: MUL f[]'myAcc = acc * f.val;' tp[myAcc] 'val = tp.val;'
+| DIV f[]'myAcc = acc / f.val;' tp[myAcc] 'val = tp.val;'
+| EPS 'val = acc;'
+;
+
+? [] f ['Integer' val]
+: LPAR e[]'val = e.val;' RPAR
+| NUM 'val = Integer.parseInt(NUM.text);'
+| SUB f[]'val = -f.val;'
+;
+
+! SUB = ['-'];
+! NUM = ['[0-9]+'];
+! ADD = ['\\+'];
+! MUL = ['\\*'];
+! DIV = ['\\\\'];
+! LPAR = ['\\('];
+! RPAR = ['\\)'];
+! SKIP = [' \t\n\r'];
+! SEMI = [';'];
